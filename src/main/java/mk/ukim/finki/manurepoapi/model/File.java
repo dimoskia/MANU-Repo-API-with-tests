@@ -24,7 +24,7 @@ public class File {
     @ManyToOne(fetch = FetchType.LAZY)
     private Record record;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "id")
     private FileData fileData;

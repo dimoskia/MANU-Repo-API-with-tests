@@ -1,6 +1,7 @@
 package mk.ukim.finki.manurepoapi.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
 import mk.ukim.finki.manurepoapi.model.File;
 import mk.ukim.finki.manurepoapi.model.FileData;
 import mk.ukim.finki.manurepoapi.model.Record;
@@ -34,4 +35,8 @@ public class FileServiceImpl implements FileService {
         return fileRepository.save(file);
     }
 
+    @Override
+    public File getFile(Long fileId) {
+        return fileRepository.findById(fileId).orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
+    }
 }
