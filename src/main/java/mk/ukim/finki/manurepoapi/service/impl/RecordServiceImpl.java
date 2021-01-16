@@ -4,9 +4,11 @@ import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.RecordsFilter;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.repository.RecordRepository;
+import mk.ukim.finki.manurepoapi.repository.specification.RecordSpecification;
 import mk.ukim.finki.manurepoapi.service.RecordService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -17,7 +19,8 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Page<Record> getRecordsPage(RecordsFilter filter, Pageable pageable) {
-        return recordRepository.findAll(pageable);
+        Specification<Record> recordSpecification = RecordSpecification.browseRecordsSpec(filter);
+        return recordRepository.findAll(recordSpecification, pageable);
     }
 
 }
