@@ -26,9 +26,9 @@ public class FileController {
         return DtoMapper.mapFileToResponse(file);
     }
 
-    @GetMapping("/{fileId}")
-    public void downloadFile(@PathVariable Long fileId, HttpServletResponse response) throws IOException {
-        File file = fileService.getFile(fileId);
+    @GetMapping("/{recordId}/{fileId}")
+    public void downloadFile(@PathVariable Long recordId, @PathVariable Long fileId, HttpServletResponse response) throws IOException {
+        File file = fileService.getPublicFile(recordId, fileId);
         response.setContentType(file.getContentType());
         response.setContentLengthLong(file.getSize());
         response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getFileName() + "\"");

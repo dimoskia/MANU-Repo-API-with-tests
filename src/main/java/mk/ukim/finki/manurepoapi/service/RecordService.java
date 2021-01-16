@@ -11,4 +11,6 @@ public interface RecordService {
 
     Record getRecord(Long recordId);
 
+    boolean isRecordPublic(Long recordId);
+
 }

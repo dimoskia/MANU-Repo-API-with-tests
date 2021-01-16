@@ -30,4 +30,9 @@ public class RecordServiceImpl implements RecordService {
                 .orElseThrow(() -> new EntityNotFoundException(Record.class, recordId));
     }
 
+    @Override
+    public boolean isRecordPublic(Long recordId) {
+        return recordRepository.existsByIdAndApprovedTrueAndPrivateRecordFalse(recordId);
+    }
+
 }

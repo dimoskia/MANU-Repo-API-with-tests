@@ -24,7 +24,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public File saveFileToRecord(MultipartFile multipartFile, Long recordId) throws IOException {
         Optional<String> contentTypeOptional = Optional.ofNullable(multipartFile.getContentType());
-        Record record = recordService.getRecord(recordId);
+        Record record = recordService.getPublicRecord(recordId);
         File file = File.builder()
                 .fileName(multipartFile.getOriginalFilename())
                 .size(multipartFile.getSize())
@@ -36,7 +36,16 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File getFile(Long fileId) {
+    public File getPublicFile(Long recordId, Long fileId) {
+        File file = getFile(fileId);
+        if (recordService.isRecordPublic(recordId) && file.getRecord().getId().equals(recordId)) {
+            return file;
+        }
+        throw new EntityNotFoundException(File.class, fileId);
+    }
+
+    private File getFile(Long fileId) {
         return fileRepository.findById(fileId).orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
     }
+
 }
