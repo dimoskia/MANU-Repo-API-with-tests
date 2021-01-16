@@ -23,4 +23,9 @@ public class RecordServiceImpl implements RecordService {
         return recordRepository.findAll(recordSpecification, pageable);
     }
 
+    @Override
+    public Record getRecord(Long recordId) {
+        return recordRepository.findById(recordId).orElseThrow(RuntimeException::new);
+    }
+
 }

@@ -9,4 +9,6 @@ public interface RecordService {
 
     Page<Record> getRecordsPage(RecordsFilter filter, Pageable pageable);
 
+    Record getRecord(Long recordId);
+
 }
