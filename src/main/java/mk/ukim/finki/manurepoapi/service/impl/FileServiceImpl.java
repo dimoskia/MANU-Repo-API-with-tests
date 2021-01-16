@@ -37,15 +37,21 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public File getPublicFile(Long recordId, Long fileId) {
-        File file = getFile(fileId);
-        if (recordService.isRecordPublic(recordId) && file.getRecord().getId().equals(recordId)) {
-            return file;
+        if (!recordService.isRecordPublic(recordId)) {
+            throw new EntityNotFoundException(File.class, fileId);
         }
-        throw new EntityNotFoundException(File.class, fileId);
+        return getFile(recordId, fileId);
     }
 
-    private File getFile(Long fileId) {
-        return fileRepository.findById(fileId).orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
+    private File getFile(Long recordId, Long fileId) {
+        return fileRepository.findByIdAndRecordId(fileId, recordId)
+                .orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
+    }
+
+    @Override
+    public void removeFileFromRecord(Long recordId, Long fileId) {
+        File file = getFile(recordId, fileId);
+        fileRepository.delete(file);
     }
 
 }

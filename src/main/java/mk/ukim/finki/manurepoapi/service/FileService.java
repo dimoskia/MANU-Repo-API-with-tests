@@ -11,4 +11,6 @@ public interface FileService {
 
     File getPublicFile(Long recordId, Long fileId);
 
+    void removeFileFromRecord(Long recordId, Long fileId);
+
 }
