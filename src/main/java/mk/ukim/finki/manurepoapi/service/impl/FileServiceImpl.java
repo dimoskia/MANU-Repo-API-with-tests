@@ -44,7 +44,7 @@ public class FileServiceImpl implements FileService {
     }
 
     private File getFile(Long recordId, Long fileId) {
-        return fileRepository.findByIdAndRecordId(fileId, recordId)
+        return fileRepository.findFile(recordId, fileId)
                 .orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
     }
 
