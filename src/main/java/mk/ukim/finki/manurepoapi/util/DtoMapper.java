@@ -37,7 +37,8 @@ public class DtoMapper {
         FileResponse fileResponse = new FileResponse();
         BeanUtils.copyProperties(file, fileResponse);
         String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/files/")
+                .pathSegment("files")
+                .pathSegment(file.getRecord().getId().toString())
                 .path(file.getId().toString())
                 .toUriString();
         fileResponse.setFileDownloadUri(downloadUri);
