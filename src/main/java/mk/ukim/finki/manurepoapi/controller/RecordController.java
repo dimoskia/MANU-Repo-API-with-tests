@@ -36,7 +36,7 @@ public class RecordController {
 
     @GetMapping("/{recordId}")
     public RecordDetails getRecordDetails(@PathVariable Long recordId) {
-        Record record = recordService.getRecord(recordId);
+        Record record = recordService.getPublicRecord(recordId);
         return DtoMapper.mapRecordToDetails(record);
     }
 

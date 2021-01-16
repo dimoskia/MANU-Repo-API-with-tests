@@ -24,7 +24,7 @@ public class FileServiceImpl implements FileService {
     @Override
     public File saveFileToRecord(MultipartFile multipartFile, Long recordId) throws IOException {
         Optional<String> contentTypeOptional = Optional.ofNullable(multipartFile.getContentType());
-        Record record = recordService.getPublicRecord(recordId);
+        Record record = recordService.getRecord(recordId);
         File file = File.builder()
                 .fileName(multipartFile.getOriginalFilename())
                 .size(multipartFile.getSize())
