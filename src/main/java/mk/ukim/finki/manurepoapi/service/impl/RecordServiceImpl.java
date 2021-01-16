@@ -2,6 +2,7 @@ package mk.ukim.finki.manurepoapi.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.RecordsFilter;
+import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.repository.RecordRepository;
 import mk.ukim.finki.manurepoapi.repository.specification.RecordSpecification;
@@ -25,7 +26,8 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Record getRecord(Long recordId) {
-        return recordRepository.findById(recordId).orElseThrow(RuntimeException::new);
+        return recordRepository.findById(recordId)
+                .orElseThrow(() -> new EntityNotFoundException(Record.class, recordId));
     }
 
 }
