@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -53,6 +54,9 @@ public class Record {
     private Boolean approved;
 
     private Boolean privateRecord;
+
+    @OneToMany(mappedBy = "record")
+    private Set<File> files;
 
     public Record() {
         this.collection = Collection.OTHER;
