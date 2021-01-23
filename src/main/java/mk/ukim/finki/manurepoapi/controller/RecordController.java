@@ -1,10 +1,7 @@
 package mk.ukim.finki.manurepoapi.controller;
 
 import lombok.RequiredArgsConstructor;
-import mk.ukim.finki.manurepoapi.dto.RecordCard;
-import mk.ukim.finki.manurepoapi.dto.RecordDetails;
-import mk.ukim.finki.manurepoapi.dto.RecordStatistics;
-import mk.ukim.finki.manurepoapi.dto.RecordsFilter;
+import mk.ukim.finki.manurepoapi.dto.*;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.service.RecordService;
 import mk.ukim.finki.manurepoapi.service.StatisticsService;
@@ -16,6 +13,8 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/records")
@@ -50,4 +49,8 @@ public class RecordController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PostMapping
+    public ResponseEntity<RecordRequest> createRecord(@RequestBody @Valid RecordRequest recordRequest) {
+        return new ResponseEntity<>(recordRequest, HttpStatus.OK);
+    }
 }

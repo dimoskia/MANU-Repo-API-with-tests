@@ -68,10 +68,8 @@ public class Record {
     private Set<Account> authorAccounts;
 
     public Record() {
-        this.collection = Collection.OTHER;
         this.downloadsCount = 0;
         this.approved = false;
-        this.privateRecord = false;
     }
 
 }
