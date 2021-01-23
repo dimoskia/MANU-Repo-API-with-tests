@@ -15,6 +15,9 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@NamedEntityGraph(name = "Record.authorAccounts",
+        attributeNodes = @NamedAttributeNode("authorAccounts")
+)
 public class Record {
 
     @Id
@@ -57,6 +60,12 @@ public class Record {
 
     @OneToMany(mappedBy = "record")
     private Set<File> files;
+
+    @ManyToMany
+    @JoinTable(name = "record_account",
+            joinColumns = {@JoinColumn(name = "record_id")},
+            inverseJoinColumns = {@JoinColumn(name = "account_id")})
+    private Set<Account> authorAccounts;
 
     public Record() {
         this.collection = Collection.OTHER;

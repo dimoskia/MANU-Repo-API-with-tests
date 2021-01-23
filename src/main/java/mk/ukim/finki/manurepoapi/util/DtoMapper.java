@@ -1,8 +1,10 @@
 package mk.ukim.finki.manurepoapi.util;
 
 import mk.ukim.finki.manurepoapi.dto.FileResponse;
+import mk.ukim.finki.manurepoapi.dto.MemberCard;
 import mk.ukim.finki.manurepoapi.dto.RecordCard;
 import mk.ukim.finki.manurepoapi.dto.RecordDetails;
+import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.File;
 import mk.ukim.finki.manurepoapi.model.Record;
 import org.modelmapper.ModelMapper;
@@ -29,7 +31,11 @@ public class DtoMapper {
         Set<FileResponse> files = record.getFiles().stream()
                 .map(DtoMapper::mapFileToResponse)
                 .collect(Collectors.toSet());
+        Set<MemberCard> memberAuthors = record.getAuthorAccounts().stream()
+                .map(DtoMapper::mapAccountToMemberCard)
+                .collect(Collectors.toSet());
         recordDetails.setFiles(files);
+        recordDetails.setAuthorsDetails(memberAuthors);
         return recordDetails;
     }
 
@@ -42,6 +48,10 @@ public class DtoMapper {
                 .toUriString();
         fileResponse.setFileDownloadUri(downloadUri);
         return fileResponse;
+    }
+
+    public static MemberCard mapAccountToMemberCard(Account account) {
+        return modelMapper.map(account, MemberCard.class);
     }
 
 }

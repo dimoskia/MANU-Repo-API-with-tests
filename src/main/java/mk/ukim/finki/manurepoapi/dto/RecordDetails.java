@@ -43,6 +43,8 @@ public class RecordDetails {
 
     private Set<FileResponse> files;
 
+    private Set<MemberCard> authorsDetails;
+
     public String getDepartment() {
         return department.getFullDepartment();
     }
