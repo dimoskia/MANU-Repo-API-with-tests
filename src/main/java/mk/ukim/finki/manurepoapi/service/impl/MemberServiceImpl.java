@@ -4,7 +4,9 @@ import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.MembersFilter;
 import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
 import mk.ukim.finki.manurepoapi.model.Account;
+import mk.ukim.finki.manurepoapi.model.ProfileImage;
 import mk.ukim.finki.manurepoapi.repository.AccountRepository;
+import mk.ukim.finki.manurepoapi.repository.ProfileImageRepository;
 import mk.ukim.finki.manurepoapi.repository.specification.MemberSpecification;
 import mk.ukim.finki.manurepoapi.service.MemberService;
 import org.springframework.data.domain.Page;
@@ -17,6 +19,7 @@ import org.springframework.stereotype.Service;
 public class MemberServiceImpl implements MemberService {
 
     private final AccountRepository accountRepository;
+    private final ProfileImageRepository profileImageRepository;
 
     @Override
     public Page<Account> getMembersPage(MembersFilter filter, Pageable pageable) {
@@ -28,5 +31,11 @@ public class MemberServiceImpl implements MemberService {
     public Account getMemberDetails(Long accountId) {
         return accountRepository.findById(accountId)
                 .orElseThrow(() -> new EntityNotFoundException(Account.class, accountId));
+    }
+
+    @Override
+    public ProfileImage getProfileImage(Long imageId) {
+        return profileImageRepository.findById(imageId)
+                .orElseThrow(() -> new EntityNotFoundException(ProfileImage.class, imageId));
     }
 }
