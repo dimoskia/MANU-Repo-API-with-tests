@@ -15,4 +15,6 @@ public interface RecordService {
 
     Record getRecord(Long recordId);
 
+    void deleteRecord(Long recordId);
+
 }

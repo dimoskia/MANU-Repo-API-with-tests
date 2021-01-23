@@ -58,7 +58,7 @@ public class Record {
 
     private Boolean privateRecord;
 
-    @OneToMany(mappedBy = "record")
+    @OneToMany(mappedBy = "record", cascade = CascadeType.REMOVE)
     private Set<File> files;
 
     @ManyToMany

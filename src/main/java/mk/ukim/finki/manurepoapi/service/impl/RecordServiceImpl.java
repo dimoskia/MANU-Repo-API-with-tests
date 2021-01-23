@@ -7,6 +7,7 @@ import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.repository.RecordRepository;
 import mk.ukim.finki.manurepoapi.repository.specification.RecordSpecification;
 import mk.ukim.finki.manurepoapi.service.RecordService;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -34,6 +35,15 @@ public class RecordServiceImpl implements RecordService {
     public Record getRecord(Long recordId) {
         return recordRepository.findById(recordId)
                 .orElseThrow(() -> new EntityNotFoundException(Record.class, recordId));
+    }
+
+    @Override
+    public void deleteRecord(Long recordId) {
+        try {
+            recordRepository.deleteById(recordId);
+        } catch (EmptyResultDataAccessException exception) {
+            throw new EntityNotFoundException(Record.class, recordId);
+        }
     }
 
     @Override
