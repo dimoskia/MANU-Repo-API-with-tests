@@ -32,23 +32,14 @@ public class DtoMapper {
                 .collect(Collectors.toSet());
         recordDetails.setFiles(files);
 
-        Map<String, MemberCard> memberCardMap = record.getAuthorAccounts().stream()
-                .collect(Collectors.toMap(DtoMapper::extractFullName, DtoMapper::mapAccountToMemberCard));
-        Arrays.stream(record.getAuthors().split(", ")).forEach(author -> {
-            String[] parts = author.split("\\s+");
-            MemberCard build = new MemberCard();
-            build.setFirstName(parts[0]);
-            build.setLastName(parts[1]);
-            memberCardMap.putIfAbsent(author, build);
-        });
-        recordDetails.setAuthors(new HashSet<>(memberCardMap.values()));
+        Set<MemberCard> authors = record.getAuthorAccounts().stream()
+                .map(DtoMapper::mapAccountToMemberCard)
+                .collect(Collectors.toSet());
+        recordDetails.setAuthors(authors);
 
         return recordDetails;
     }
 
-    private static String extractFullName(Account account) {
-        return account.getFirstName() + " " + account.getLastName();
-    }
 
     public static FileResponse mapFileToResponse(File file) {
         FileResponse fileResponse = new FileResponse();
