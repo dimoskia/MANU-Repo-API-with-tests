@@ -25,4 +25,10 @@ public class AccountController {
         accountService.setProfileImage(accountId, imageFile);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
+    @DeleteMapping("/{accountId}/profileImage")
+    public ResponseEntity<?> removeProfileImage(@PathVariable Long accountId) {
+        accountService.deleteProfileImage(accountId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 }

@@ -39,6 +39,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void deleteProfileImage(Long accountId) {
-
+        Account account = getAccount(accountId);
+        account.setProfileImage(null);
+        accountRepository.save(account);
     }
 }
