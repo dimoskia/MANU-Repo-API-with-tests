@@ -2,6 +2,7 @@ package mk.ukim.finki.manurepoapi.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.MembersFilter;
+import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.repository.AccountRepository;
 import mk.ukim.finki.manurepoapi.repository.specification.MemberSpecification;
@@ -23,4 +24,9 @@ public class MemberServiceImpl implements MemberService {
         return accountRepository.findAll(specification, pageable);
     }
 
+    @Override
+    public Account getMemberDetails(Long accountId) {
+        return accountRepository.findById(accountId)
+                .orElseThrow(() -> new EntityNotFoundException(Account.class, accountId));
+    }
 }

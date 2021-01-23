@@ -9,4 +9,6 @@ public interface MemberService {
 
     Page<Account> getMembersPage(MembersFilter filter, Pageable pageable);
 
+    Account getMemberDetails(Long accountId);
+
 }

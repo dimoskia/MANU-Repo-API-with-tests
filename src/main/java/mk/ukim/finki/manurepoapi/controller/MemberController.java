@@ -2,6 +2,7 @@ package mk.ukim.finki.manurepoapi.controller;
 
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.MemberCard;
+import mk.ukim.finki.manurepoapi.dto.MemberDetails;
 import mk.ukim.finki.manurepoapi.dto.MembersFilter;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.service.MemberService;
@@ -11,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -27,6 +29,12 @@ public class MemberController {
             @PageableDefault(sort = "lastName", direction = Sort.Direction.ASC, value = 15) Pageable pageable) {
         Page<Account> accountPage = memberService.getMembersPage(filter, pageable);
         return accountPage.map(DtoMapper::mapAccountToMemberCard);
+    }
+
+    @GetMapping("/{accountId}")
+    public MemberDetails getMemberDetails(@PathVariable Long accountId) {
+        Account account = memberService.getMemberDetails(accountId);
+        return DtoMapper.mapAccountToMemberDetails(account);
     }
 
 }

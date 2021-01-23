@@ -1,9 +1,6 @@
 package mk.ukim.finki.manurepoapi.util;
 
-import mk.ukim.finki.manurepoapi.dto.FileResponse;
-import mk.ukim.finki.manurepoapi.dto.MemberCard;
-import mk.ukim.finki.manurepoapi.dto.RecordCard;
-import mk.ukim.finki.manurepoapi.dto.RecordDetails;
+import mk.ukim.finki.manurepoapi.dto.*;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.File;
 import mk.ukim.finki.manurepoapi.model.Record;
@@ -54,4 +51,7 @@ public class DtoMapper {
         return modelMapper.map(account, MemberCard.class);
     }
 
+    public static MemberDetails mapAccountToMemberDetails(Account account) {
+        return modelMapper.map(account, MemberDetails.class);
+    }
 }
