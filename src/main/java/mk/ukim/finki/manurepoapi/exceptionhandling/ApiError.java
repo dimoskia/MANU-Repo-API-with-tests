@@ -36,6 +36,11 @@ public class ApiError {
         this.message = message;
     }
 
+    public ApiError(HttpStatus httpStatus, String message, Throwable ex) {
+        this(httpStatus, message);
+        this.debugMessage = ex.getLocalizedMessage();
+    }
+
     private void addSubError(ApiSubError subError) {
         if (subErrors == null) {
             subErrors = new ArrayList<>();
