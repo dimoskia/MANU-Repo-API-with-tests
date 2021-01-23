@@ -17,8 +17,6 @@ public class RecordDetails {
 
     private String title;
 
-    private String authors;
-
     private Collection collection;
 
     private Department department;
@@ -43,14 +41,14 @@ public class RecordDetails {
 
     private Set<FileResponse> files;
 
-    private Set<MemberCard> authorsDetails;
+    private Set<MemberCard> authors;
 
     public String getDepartment() {
-        return department.getFullDepartment();
+        return department == null ? null : department.getFullDepartment();
     }
 
     public String getCollectionName() {
-        return collection.getFullCollection();
+        return collection == null ? null : collection.getFullCollection();
     }
 
 }

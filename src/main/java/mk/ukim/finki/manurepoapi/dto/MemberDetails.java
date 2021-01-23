@@ -36,19 +36,19 @@ public class MemberDetails {
     private String workplace;
 
     public String getAcademicDegree() {
-        return academicDegree.getFullDegree();
+        return academicDegree == null ? null : academicDegree.getFullDegree();
     }
 
     public String getAcademicRank() {
-        return academicRank.getFullRank();
+        return academicRank == null ? null : academicRank.getFullRank();
     }
 
     public String getMemberType() {
-        return memberType.getFullType();
+        return memberType == null ? null : memberType.getFullType();
     }
 
     public String getDepartment() {
-        return department.getFullDepartment();
+        return department == null ? null : department.getFullDepartment();
     }
 
 }

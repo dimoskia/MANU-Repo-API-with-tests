@@ -30,11 +30,11 @@ public class RecordCard {
     private LocalDate dateArchived;
 
     public String getDepartment() {
-        return department.getFullDepartment();
+        return department == null ? null : department.getFullDepartment();
     }
 
     public String getCollectionName() {
-        return collection.getFullCollection();
+        return collection == null ? null : collection.getFullCollection();
     }
 
 }
