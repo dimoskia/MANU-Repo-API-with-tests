@@ -48,10 +48,26 @@ public class DtoMapper {
     }
 
     public static MemberCard mapAccountToMemberCard(Account account) {
-        return modelMapper.map(account, MemberCard.class);
+        MemberCard memberCard = modelMapper.map(account, MemberCard.class);
+        if (account.getProfileImage() != null) {
+            String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/members/profileImage/")
+                    .path(account.getProfileImage().getId().toString())
+                    .toUriString();
+            memberCard.setImageUrl(imageUrl);
+        }
+        return memberCard;
     }
 
     public static MemberDetails mapAccountToMemberDetails(Account account) {
-        return modelMapper.map(account, MemberDetails.class);
+        MemberDetails memberDetails = modelMapper.map(account, MemberDetails.class);
+        if (account.getProfileImage() != null) {
+            String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/members/profileImage/")
+                    .path(account.getProfileImage().getId().toString())
+                    .toUriString();
+            memberDetails.setImageUrl(imageUrl);
+        }
+        return memberDetails;
     }
 }
