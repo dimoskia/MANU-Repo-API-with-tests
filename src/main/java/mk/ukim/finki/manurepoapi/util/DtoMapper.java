@@ -8,7 +8,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class DtoMapper {
@@ -23,17 +23,31 @@ public class DtoMapper {
 
     public static RecordDetails mapRecordToDetails(Record record) {
         RecordDetails recordDetails = new RecordDetails();
-        BeanUtils.copyProperties(record, recordDetails, "dateArchived", "files");
+        BeanUtils.copyProperties(record, recordDetails, "dateArchived", "files", "authors");
+
         recordDetails.setDateArchived(record.getDateArchived().toLocalDate());
+
         Set<FileResponse> files = record.getFiles().stream()
                 .map(DtoMapper::mapFileToResponse)
                 .collect(Collectors.toSet());
-        Set<MemberCard> memberAuthors = record.getAuthorAccounts().stream()
-                .map(DtoMapper::mapAccountToMemberCard)
-                .collect(Collectors.toSet());
         recordDetails.setFiles(files);
-        recordDetails.setAuthorsDetails(memberAuthors);
+
+        Map<String, MemberCard> memberCardMap = record.getAuthorAccounts().stream()
+                .collect(Collectors.toMap(DtoMapper::extractFullName, DtoMapper::mapAccountToMemberCard));
+        Arrays.stream(record.getAuthors().split(", ")).forEach(author -> {
+            String[] parts = author.split("\\s+");
+            MemberCard build = new MemberCard();
+            build.setFirstName(parts[0]);
+            build.setLastName(parts[1]);
+            memberCardMap.putIfAbsent(author, build);
+        });
+        recordDetails.setAuthors(new HashSet<>(memberCardMap.values()));
+
         return recordDetails;
+    }
+
+    private static String extractFullName(Account account) {
+        return account.getFirstName() + " " + account.getLastName();
     }
 
     public static FileResponse mapFileToResponse(File file) {
