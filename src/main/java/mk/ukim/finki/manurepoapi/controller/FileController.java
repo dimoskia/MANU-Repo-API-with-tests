@@ -30,9 +30,9 @@ public class FileController {
         return ResponseEntity.created(URI.create(fileResponse.getFileDownloadUri())).body(fileResponse);
     }
 
-    @GetMapping("/{recordId}/{fileId}")
-    public void downloadFile(@PathVariable Long recordId, @PathVariable Long fileId, HttpServletResponse response) throws IOException {
-        File file = fileService.getPublicFile(recordId, fileId);
+    @GetMapping("/{fileId}")
+    public void downloadFile(@PathVariable Long fileId, HttpServletResponse response) throws IOException {
+        File file = fileService.getPublicFile(fileId);
         response.setContentType(file.getContentType());
         response.setContentLengthLong(file.getSize());
         response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getFileName() + "\"");
@@ -40,9 +40,9 @@ public class FileController {
         response.getOutputStream().flush();
     }
 
-    @DeleteMapping("/{recordId}/{fileId}")
-    public ResponseEntity<?> deleteFileFromRecord(@PathVariable Long recordId, @PathVariable Long fileId) {
-        fileService.removeFileFromRecord(recordId, fileId);
+    @DeleteMapping("/{fileId}")
+    public ResponseEntity<?> deleteFileFromRecord(@PathVariable Long fileId) {
+        fileService.removeFile(fileId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

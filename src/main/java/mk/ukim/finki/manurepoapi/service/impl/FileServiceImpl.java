@@ -8,6 +8,7 @@ import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.repository.FileRepository;
 import mk.ukim.finki.manurepoapi.service.FileService;
 import mk.ukim.finki.manurepoapi.service.RecordService;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -36,22 +37,26 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File getPublicFile(Long recordId, Long fileId) {
-        if (!recordService.isRecordPublic(recordId)) {
+    public File getPublicFile(Long fileId) {
+        File file = getFile(fileId);
+        if (!recordService.isRecordPublic(file.getRecord().getId())) {
             throw new EntityNotFoundException(File.class, fileId);
         }
-        return getFile(recordId, fileId);
-    }
-
-    private File getFile(Long recordId, Long fileId) {
-        return fileRepository.findFile(recordId, fileId)
-                .orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
+        return file;
     }
 
     @Override
-    public void removeFileFromRecord(Long recordId, Long fileId) {
-        File file = getFile(recordId, fileId);
-        fileRepository.delete(file);
+    public File getFile(Long fileId) {
+        return fileRepository.findById(fileId).orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
+    }
+
+    @Override
+    public void removeFile(Long fileId) {
+        try {
+            fileRepository.deleteById(fileId);
+        } catch (EmptyResultDataAccessException ex) {
+            throw new EntityNotFoundException(File.class, fileId);
+        }
     }
 
 }
