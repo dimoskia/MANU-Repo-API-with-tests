@@ -51,4 +51,7 @@ public class Account {
     @ManyToMany(mappedBy = "authorAccounts")
     private Set<Record> records;
 
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private ProfileImage profileImage;
+
 }
