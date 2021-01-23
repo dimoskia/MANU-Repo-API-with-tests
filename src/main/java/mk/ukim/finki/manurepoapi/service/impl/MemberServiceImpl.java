@@ -29,7 +29,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public Account getMemberDetails(Long accountId) {
-        return accountRepository.findById(accountId)
+        return accountRepository.findByIdAndEnabledTrue(accountId)
                 .orElseThrow(() -> new EntityNotFoundException(Account.class, accountId));
     }
 
@@ -38,4 +38,5 @@ public class MemberServiceImpl implements MemberService {
         return profileImageRepository.findById(imageId)
                 .orElseThrow(() -> new EntityNotFoundException(ProfileImage.class, imageId));
     }
+
 }
