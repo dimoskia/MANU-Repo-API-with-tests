@@ -20,8 +20,7 @@ public class RecordRequest {
     @NotEmpty(message = "Title must not be empty")
     private String title;
 
-    @NotEmpty(message = "There must be at least one record author")
-    private List<Long> authorsIds;
+    private List<Long> authorIds;
 
     private Collection collection = Collection.OTHER;
 

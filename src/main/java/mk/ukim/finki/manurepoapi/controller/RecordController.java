@@ -13,8 +13,10 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/records")
@@ -50,7 +52,14 @@ public class RecordController {
     }
 
     @PostMapping
-    public ResponseEntity<RecordRequest> createRecord(@RequestBody @Valid RecordRequest recordRequest) {
-        return new ResponseEntity<>(recordRequest, HttpStatus.OK);
+    public ResponseEntity<RecordDetails> createRecord(@RequestBody @Valid RecordRequest recordRequest) {
+        Record record = recordService.createRecord(recordRequest);
+        RecordDetails recordDetails = DtoMapper.mapRecordToDetails(record);
+        String locationUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .pathSegment("records")
+                .path(record.getId().toString())
+                .toUriString();
+        return ResponseEntity.created(URI.create(locationUri)).body(recordDetails);
     }
+
 }

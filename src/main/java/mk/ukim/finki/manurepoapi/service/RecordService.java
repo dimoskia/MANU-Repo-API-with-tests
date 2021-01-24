@@ -1,5 +1,6 @@
 package mk.ukim.finki.manurepoapi.service;
 
+import mk.ukim.finki.manurepoapi.dto.RecordRequest;
 import mk.ukim.finki.manurepoapi.dto.RecordsFilter;
 import mk.ukim.finki.manurepoapi.model.Record;
 import org.springframework.data.domain.Page;
@@ -16,5 +17,7 @@ public interface RecordService {
     Record getRecord(Long recordId);
 
     void deleteRecord(Long recordId);
+
+    Record createRecord(RecordRequest recordRequest);
 
 }
