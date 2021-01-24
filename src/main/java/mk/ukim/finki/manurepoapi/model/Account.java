@@ -57,6 +57,8 @@ public class Account {
 
     public Account() {
         this.records = new HashSet<>();
+        this.role = Role.ROLE_USER;
+        this.enabled = false;
     }
 
 }
