@@ -1,6 +1,6 @@
 package mk.ukim.finki.manurepoapi.repository.specification;
 
-import mk.ukim.finki.manurepoapi.dto.MembersFilter;
+import mk.ukim.finki.manurepoapi.dto.request.MembersFilter;
 import mk.ukim.finki.manurepoapi.model.Account;
 import org.springframework.data.jpa.domain.Specification;
 

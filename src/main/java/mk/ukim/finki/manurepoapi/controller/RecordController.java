@@ -1,7 +1,9 @@
 package mk.ukim.finki.manurepoapi.controller;
 
 import lombok.RequiredArgsConstructor;
-import mk.ukim.finki.manurepoapi.dto.*;
+import mk.ukim.finki.manurepoapi.dto.request.ManageRecordsFilter;
+import mk.ukim.finki.manurepoapi.dto.request.RecordRequest;
+import mk.ukim.finki.manurepoapi.dto.response.*;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.service.RecordService;
 import mk.ukim.finki.manurepoapi.service.StatisticsService;

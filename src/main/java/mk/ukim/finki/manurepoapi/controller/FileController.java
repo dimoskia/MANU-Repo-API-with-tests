@@ -1,7 +1,7 @@
 package mk.ukim.finki.manurepoapi.controller;
 
 import lombok.RequiredArgsConstructor;
-import mk.ukim.finki.manurepoapi.dto.FileResponse;
+import mk.ukim.finki.manurepoapi.dto.response.FileResponse;
 import mk.ukim.finki.manurepoapi.model.File;
 import mk.ukim.finki.manurepoapi.service.FileService;
 import mk.ukim.finki.manurepoapi.util.DtoMapper;

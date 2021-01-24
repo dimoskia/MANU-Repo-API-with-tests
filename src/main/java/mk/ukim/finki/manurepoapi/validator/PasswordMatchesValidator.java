@@ -1,7 +1,7 @@
 package mk.ukim.finki.manurepoapi.validator;
 
 
-import mk.ukim.finki.manurepoapi.dto.AccountRequest;
+import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
 
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;

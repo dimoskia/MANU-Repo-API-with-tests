@@ -1,21 +1,21 @@
-package mk.ukim.finki.manurepoapi.dto;
+package mk.ukim.finki.manurepoapi.dto.response;
 
 import lombok.Getter;
 import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.enums.Department;
-import mk.ukim.finki.manurepoapi.enums.PublicationStatus;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Getter
 @Setter
-public class RecordDetails {
+public class RecordCard {
 
     private Long id;
 
     private String title;
+
+    private String authors;
 
     private Collection collection;
 
@@ -28,20 +28,6 @@ public class RecordDetails {
     private Integer downloadsCount;
 
     private LocalDate dateArchived;
-
-    private String descriptionOrAbstract;
-
-    private String language;
-
-    private Integer numPages;
-
-    private LocalDate publicationDate;
-
-    private PublicationStatus publicationStatus;
-
-    private Set<FileResponse> files;
-
-    private Set<MemberCard> authors;
 
     public String getDepartment() {
         return department == null ? null : department.getFullDepartment();

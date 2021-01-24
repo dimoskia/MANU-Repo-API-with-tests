@@ -1,4 +1,4 @@
-package mk.ukim.finki.manurepoapi.dto;
+package mk.ukim.finki.manurepoapi.dto.request;
 
 import lombok.Getter;
 import lombok.Setter;

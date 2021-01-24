@@ -1,6 +1,7 @@
 package mk.ukim.finki.manurepoapi.controller;
 
 import lombok.RequiredArgsConstructor;
+import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
 import mk.ukim.finki.manurepoapi.service.AccountService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.validation.Valid;
 import java.io.IOException;
 
 @RestController
@@ -16,6 +18,11 @@ import java.io.IOException;
 public class AccountController {
 
     private final AccountService accountService;
+
+    @PostMapping
+    public AccountRequest createAccount(@RequestBody @Valid AccountRequest accountRequest) {
+        return accountRequest;
+    }
 
     @PutMapping("/{accountId}/profileImage")
     public ResponseEntity<?> setProfileImage(@PathVariable Long accountId, @RequestParam MultipartFile imageFile) throws IOException {

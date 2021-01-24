@@ -1,6 +1,6 @@
 package mk.ukim.finki.manurepoapi.validator;
 
-import mk.ukim.finki.manurepoapi.dto.RecordRequest;
+import mk.ukim.finki.manurepoapi.dto.request.RecordRequest;
 import mk.ukim.finki.manurepoapi.enums.PublicationStatus;
 
 import javax.validation.ConstraintValidator;

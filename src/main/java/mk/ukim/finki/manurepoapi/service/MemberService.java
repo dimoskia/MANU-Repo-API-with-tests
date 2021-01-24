@@ -1,6 +1,6 @@
 package mk.ukim.finki.manurepoapi.service;
 
-import mk.ukim.finki.manurepoapi.dto.MembersFilter;
+import mk.ukim.finki.manurepoapi.dto.request.MembersFilter;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.ProfileImage;
 import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;

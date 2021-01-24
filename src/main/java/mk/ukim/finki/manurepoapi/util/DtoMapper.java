@@ -1,6 +1,6 @@
 package mk.ukim.finki.manurepoapi.util;
 
-import mk.ukim.finki.manurepoapi.dto.*;
+import mk.ukim.finki.manurepoapi.dto.response.*;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.File;
 import mk.ukim.finki.manurepoapi.model.Record;

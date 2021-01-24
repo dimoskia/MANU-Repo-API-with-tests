@@ -1,4 +1,4 @@
-package mk.ukim.finki.manurepoapi.dto;
+package mk.ukim.finki.manurepoapi.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

@@ -1,7 +1,7 @@
 package mk.ukim.finki.manurepoapi.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import mk.ukim.finki.manurepoapi.dto.MembersFilter;
+import mk.ukim.finki.manurepoapi.dto.request.MembersFilter;
 import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.ProfileImage;
