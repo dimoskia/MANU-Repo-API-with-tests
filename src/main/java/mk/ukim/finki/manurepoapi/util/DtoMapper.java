@@ -75,4 +75,8 @@ public class DtoMapper {
         }
         return memberDetails;
     }
+
+    public static ManageRecordCard mapRecordToManageCard(Record record) {
+        return modelMapper.map(record, ManageRecordCard.class);
+    }
 }

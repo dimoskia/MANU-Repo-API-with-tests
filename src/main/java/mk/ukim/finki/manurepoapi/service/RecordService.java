@@ -1,5 +1,6 @@
 package mk.ukim.finki.manurepoapi.service;
 
+import mk.ukim.finki.manurepoapi.dto.ManageRecordsFilter;
 import mk.ukim.finki.manurepoapi.dto.RecordRequest;
 import mk.ukim.finki.manurepoapi.dto.RecordsFilter;
 import mk.ukim.finki.manurepoapi.model.Record;
@@ -19,5 +20,7 @@ public interface RecordService {
     void deleteRecord(Long recordId);
 
     Record createRecord(RecordRequest recordRequest);
+
+    Page<Record> getManageRecordsPage(ManageRecordsFilter filter, Pageable pageable, Long accountId);
 
 }

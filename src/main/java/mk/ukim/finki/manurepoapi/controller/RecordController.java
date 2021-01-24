@@ -45,6 +45,15 @@ public class RecordController {
         return statisticsService.getRecordStatistics();
     }
 
+    @GetMapping("/manage/{accountId}")
+    public Page<ManageRecordCard> getRecordsPageForAccount(
+            @PathVariable Long accountId,
+            ManageRecordsFilter recordsFilter,
+            @PageableDefault(sort = "dateArchived", direction = Sort.Direction.DESC) Pageable pageable) {
+        Page<Record> recordsPage = recordService.getManageRecordsPage(recordsFilter, pageable, accountId);
+        return recordsPage.map(DtoMapper::mapRecordToManageCard);
+    }
+
     @PostMapping("/manage")
     public ResponseEntity<RecordDetails> createRecord(@RequestBody @Valid RecordRequest recordRequest) {
         Record record = recordService.createRecord(recordRequest);

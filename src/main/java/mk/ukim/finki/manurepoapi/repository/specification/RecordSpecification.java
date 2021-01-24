@@ -1,5 +1,6 @@
 package mk.ukim.finki.manurepoapi.repository.specification;
 
+import mk.ukim.finki.manurepoapi.dto.ManageRecordsFilter;
 import mk.ukim.finki.manurepoapi.dto.RecordsFilter;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.model.Record;
@@ -21,6 +22,15 @@ public class RecordSpecification {
                 .and(isFromAuthor(filter.getAuthorId()))
                 .and(propertyEquals("privateRecord", false))
                 .and(propertyEquals("approved", true));
+    }
+
+    public static Specification<Record> manageRecordsSpec(ManageRecordsFilter filter, Long accountId) {
+        return Specification.where(SpecificationUtils.<Record>propertyContains("title", filter.getTitle()))
+                .and(SpecificationUtils.propertyEquals("collection", filter.getCollection()))
+                .and(isArchivedInYear(filter.getYear()))
+                .and(SpecificationUtils.propertyEquals("privateRecord", filter.getPrivateRecord()))
+                .and(SpecificationUtils.propertyEquals("approved", filter.getApproved()))
+                .and(isFromAuthor(accountId));
     }
 
     private static Specification<Record> searchByTitleOrKeyword(String searchTerm) {

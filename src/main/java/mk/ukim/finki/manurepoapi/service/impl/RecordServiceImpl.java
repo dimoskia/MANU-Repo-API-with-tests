@@ -1,6 +1,7 @@
 package mk.ukim.finki.manurepoapi.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import mk.ukim.finki.manurepoapi.dto.ManageRecordsFilter;
 import mk.ukim.finki.manurepoapi.dto.RecordRequest;
 import mk.ukim.finki.manurepoapi.dto.RecordsFilter;
 import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
@@ -68,6 +69,12 @@ public class RecordServiceImpl implements RecordService {
             record.setAuthors(authors);
         }
         return recordRepository.save(record);
+    }
+
+    @Override
+    public Page<Record> getManageRecordsPage(ManageRecordsFilter filter, Pageable pageable, Long accountId) {
+        Specification<Record> recordSpecification = RecordSpecification.manageRecordsSpec(filter, accountId);
+        return recordRepository.findAll(recordSpecification, pageable);
     }
 
     @Override
