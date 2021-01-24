@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -43,4 +44,10 @@ public class AccountServiceImpl implements AccountService {
         account.setProfileImage(null);
         accountRepository.save(account);
     }
+
+    @Override
+    public List<Account> getMultipleAccounts(List<Long> accountIds) {
+        return accountRepository.findAllById(accountIds);
+    }
+
 }
