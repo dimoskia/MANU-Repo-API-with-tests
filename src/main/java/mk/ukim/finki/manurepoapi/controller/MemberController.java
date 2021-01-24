@@ -6,6 +6,7 @@ import mk.ukim.finki.manurepoapi.dto.MemberDetails;
 import mk.ukim.finki.manurepoapi.dto.MembersFilter;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.ProfileImage;
+import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
 import mk.ukim.finki.manurepoapi.service.MemberService;
 import mk.ukim.finki.manurepoapi.util.DtoMapper;
 import org.springframework.data.domain.Page;
@@ -13,13 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.util.FileCopyUtils;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -48,6 +47,12 @@ public class MemberController {
         response.setContentType(profileImage.getContentType());
         FileCopyUtils.copy(profileImage.getData(), response.getOutputStream());
         response.getOutputStream().flush();
+    }
+
+    @GetMapping("/search")
+    public List<MemberProjection> searchMembersByName(@RequestParam String query,
+                                                      @RequestParam(defaultValue = "10") Integer resultSize) {
+        return memberService.searchMembersByName(query, resultSize);
     }
 
 }
