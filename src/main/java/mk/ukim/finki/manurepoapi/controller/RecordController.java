@@ -26,7 +26,7 @@ public class RecordController {
     private final RecordService recordService;
     private final StatisticsService statisticsService;
 
-    @GetMapping
+    @GetMapping("/browse")
     public Page<RecordCard> getRecordsPage(
             RecordsFilter filter,
             @PageableDefault(sort = "dateArchived", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -34,24 +34,18 @@ public class RecordController {
         return recordsPage.map(DtoMapper::mapRecordToCard);
     }
 
-    @GetMapping("/{recordId}")
+    @GetMapping("/browse/{recordId}")
     public RecordDetails getRecordDetails(@PathVariable Long recordId) {
         Record record = recordService.getPublicRecord(recordId);
         return DtoMapper.mapRecordToDetails(record);
     }
 
-    @GetMapping("/statistics")
+    @GetMapping("/browse/statistics")
     public RecordStatistics getRecordStatistics() {
         return statisticsService.getRecordStatistics();
     }
 
-    @DeleteMapping("/{recordId}")
-    public ResponseEntity<?> deleteRecord(@PathVariable Long recordId) {
-        recordService.deleteRecord(recordId);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    @PostMapping
+    @PostMapping("/manage")
     public ResponseEntity<RecordDetails> createRecord(@RequestBody @Valid RecordRequest recordRequest) {
         Record record = recordService.createRecord(recordRequest);
         RecordDetails recordDetails = DtoMapper.mapRecordToDetails(record);
@@ -60,6 +54,12 @@ public class RecordController {
                 .path(record.getId().toString())
                 .toUriString();
         return ResponseEntity.created(URI.create(locationUri)).body(recordDetails);
+    }
+
+    @DeleteMapping("/manage/{recordId}")
+    public ResponseEntity<?> deleteRecord(@PathVariable Long recordId) {
+        recordService.deleteRecord(recordId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }
