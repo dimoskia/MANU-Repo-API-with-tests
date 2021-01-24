@@ -5,6 +5,7 @@ import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.enums.Department;
 import mk.ukim.finki.manurepoapi.enums.PublicationStatus;
+import mk.ukim.finki.manurepoapi.validator.PublicationStatusDate;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import java.util.List;
 
 @Getter
 @Setter
+@PublicationStatusDate
 public class RecordRequest {
 
     @NotEmpty(message = "Title must not be empty")
