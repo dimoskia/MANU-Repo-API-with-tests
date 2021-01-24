@@ -10,6 +10,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -70,6 +71,8 @@ public class Record {
     public Record() {
         this.downloadsCount = 0;
         this.approved = false;
+        this.files = new HashSet<>();
+        this.authorAccounts = new HashSet<>();
     }
 
 }

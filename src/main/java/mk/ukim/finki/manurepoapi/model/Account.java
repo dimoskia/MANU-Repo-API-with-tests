@@ -5,6 +5,7 @@ import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.*;
 
 import javax.persistence.*;
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -53,5 +54,9 @@ public class Account {
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private ProfileImage profileImage;
+
+    public Account() {
+        this.records = new HashSet<>();
+    }
 
 }
