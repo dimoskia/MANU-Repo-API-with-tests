@@ -18,6 +18,7 @@ public class RecordSpecification {
                 .and(propertyEquals("department", filter.getDepartment()))
                 .and(propertyEquals("subject", filter.getSubject()))
                 .and(isArchivedInYear(filter.getYear()))
+                .and(isFromAuthor(filter.getAuthorId()))
                 .and(propertyEquals("privateRecord", false))
                 .and(propertyEquals("approved", true));
     }
@@ -47,6 +48,13 @@ public class RecordSpecification {
         }
         return (root, query, builder) ->
                 builder.equal(builder.function("YEAR", Integer.class, root.get("dateArchived")), year);
+    }
+
+    private static Specification<Record> isFromAuthor(Long accountId) {
+        if (accountId == null) {
+            return null;
+        }
+        return (root, query, builder) -> builder.isMember(accountId, root.get("authorAccounts"));
     }
 
 }

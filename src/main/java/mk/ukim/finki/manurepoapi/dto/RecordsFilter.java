@@ -21,4 +21,6 @@ public class RecordsFilter {
 
     private Integer year;
 
+    private Long authorId;
+
 }
