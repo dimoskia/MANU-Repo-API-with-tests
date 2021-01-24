@@ -16,4 +16,6 @@ public interface AccountService {
 
     List<Account> getMultipleAccounts(List<Long> accountIds);
 
+    boolean isEmailAvailable(String email);
+
 }

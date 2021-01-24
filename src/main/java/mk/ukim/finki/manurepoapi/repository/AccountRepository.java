@@ -24,4 +24,6 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
             "ORDER BY a.firstName, a.lastName")
     List<MemberProjection> searchByName(@Param("term") String searchTerm, Pageable pageable);
 
+    Boolean existsByEmail(String email);
+
 }

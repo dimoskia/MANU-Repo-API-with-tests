@@ -50,4 +50,9 @@ public class AccountServiceImpl implements AccountService {
         return accountRepository.findAllById(accountIds);
     }
 
+    @Override
+    public boolean isEmailAvailable(String email) {
+        return !accountRepository.existsByEmail(email);
+    }
+
 }
