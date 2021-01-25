@@ -75,3 +75,11 @@ create table record_account
     account_id bigint references account (id) on delete cascade,
     primary key (record_id, account_id)
 );
+
+create table verification_token
+(
+    id         bigserial primary key,
+    token      varchar   not null unique,
+    expiration timestamp not null,
+    account_id bigint not null references account (id) on delete cascade
+);
