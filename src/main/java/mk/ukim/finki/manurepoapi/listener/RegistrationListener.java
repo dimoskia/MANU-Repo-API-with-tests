@@ -26,7 +26,7 @@ public class RegistrationListener {
         String recipientAddress = account.getEmail();
         String subject = "Registration Confirmation";
         String confirmationUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/account/confirmRegistration")
+                .path("/accounts/confirmRegistration")
                 .queryParam("token", verificationToken.getToken())
                 .toUriString();
 
