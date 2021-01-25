@@ -8,6 +8,7 @@ import mk.ukim.finki.manurepoapi.repository.VerificationTokenRepository;
 import mk.ukim.finki.manurepoapi.service.VerificationTokenService;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 
 @Service
@@ -40,6 +41,7 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     }
 
     @Override
+    @Transactional
     public void deleteExpiredTokens() {
         tokenRepository.deleteTokensExpirationBefore(LocalDateTime.now());
     }

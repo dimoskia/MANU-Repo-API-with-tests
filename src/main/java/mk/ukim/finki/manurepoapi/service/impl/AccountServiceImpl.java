@@ -81,4 +81,10 @@ public class AccountServiceImpl implements AccountService {
         verificationTokenService.deleteToken(verificationToken);
     }
 
+    @Override
+    @Transactional
+    public void deleteExpiredAccounts() {
+        accountRepository.deleteExpiredAccounts();
+    }
+
 }

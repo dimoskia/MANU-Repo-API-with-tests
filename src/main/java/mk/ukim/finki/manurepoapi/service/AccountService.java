@@ -23,4 +23,6 @@ public interface AccountService {
 
     void confirmRegistration(String verificationToken);
 
+    void deleteExpiredAccounts();
+
 }

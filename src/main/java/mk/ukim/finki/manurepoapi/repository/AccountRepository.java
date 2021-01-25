@@ -31,4 +31,9 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
     @Query("UPDATE Account a set a.enabled = true where a.id = :accountId")
     void enableAccount(@Param("accountId") Long accountId);
 
+    @Modifying
+    @Query(value = "delete from account a where a.enabled = false " +
+            "and a.id not in (select v.account_id from verification_token v)", nativeQuery = true)
+    void deleteExpiredAccounts();
+
 }
