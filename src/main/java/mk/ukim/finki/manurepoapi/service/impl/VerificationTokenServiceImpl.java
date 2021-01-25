@@ -18,8 +18,9 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
 
     @Override
     public VerificationToken createToken(Account account) {
+        final int TOKEN_DURATION = 24;
         VerificationToken verificationToken = new VerificationToken(account);
-        verificationToken.setExpiration(LocalDateTime.now().plusHours(24));
+        verificationToken.setExpiration(LocalDateTime.now().plusHours(TOKEN_DURATION));
         return tokenRepository.save(verificationToken);
     }
 
@@ -42,4 +43,5 @@ public class VerificationTokenServiceImpl implements VerificationTokenService {
     public void deleteExpiredTokens() {
         tokenRepository.deleteTokensExpirationBefore(LocalDateTime.now());
     }
+
 }

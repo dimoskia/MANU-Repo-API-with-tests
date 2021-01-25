@@ -2,9 +2,15 @@ package mk.ukim.finki.manurepoapi.controller;
 
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
+import mk.ukim.finki.manurepoapi.dto.response.MemberDetails;
+import mk.ukim.finki.manurepoapi.event.OnRegistrationCompleteEvent;
+import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.service.AccountService;
+import mk.ukim.finki.manurepoapi.util.DtoMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.mail.MailException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -18,10 +24,18 @@ import java.io.IOException;
 public class AccountController {
 
     private final AccountService accountService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @PostMapping
-    public AccountRequest createAccount(@RequestBody @Valid AccountRequest accountRequest) {
-        return accountRequest;
+    public ResponseEntity<MemberDetails> createAccount(@RequestBody @Valid AccountRequest accountRequest) {
+        try {
+            Account registeredAccount = accountService.createAccount(accountRequest);
+            eventPublisher.publishEvent(new OnRegistrationCompleteEvent(registeredAccount));
+            MemberDetails memberDetails = DtoMapper.mapAccountToMemberDetails(registeredAccount);
+            return new ResponseEntity<>(memberDetails, HttpStatus.CREATED);
+        } catch (MailException exception) {
+            return new ResponseEntity<>(HttpStatus.BAD_GATEWAY);
+        }
     }
 
     @PutMapping("/{accountId}/profileImage")
@@ -38,4 +52,5 @@ public class AccountController {
         accountService.deleteProfileImage(accountId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
+
 }

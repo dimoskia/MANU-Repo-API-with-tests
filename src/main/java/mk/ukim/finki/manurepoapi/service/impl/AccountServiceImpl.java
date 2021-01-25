@@ -1,11 +1,13 @@
 package mk.ukim.finki.manurepoapi.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
 import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.ProfileImage;
 import mk.ukim.finki.manurepoapi.repository.AccountRepository;
 import mk.ukim.finki.manurepoapi.service.AccountService;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -53,6 +55,13 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public boolean isEmailAvailable(String email) {
         return !accountRepository.existsByEmail(email);
+    }
+
+    @Override
+    public Account createAccount(AccountRequest accountRequest) {
+        Account account = new Account();
+        BeanUtils.copyProperties(accountRequest, account);
+        return accountRepository.save(account);
     }
 
 }

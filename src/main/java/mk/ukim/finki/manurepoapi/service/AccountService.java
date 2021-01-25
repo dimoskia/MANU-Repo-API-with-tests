@@ -1,5 +1,6 @@
 package mk.ukim.finki.manurepoapi.service;
 
+import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
 import mk.ukim.finki.manurepoapi.model.Account;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -17,5 +18,7 @@ public interface AccountService {
     List<Account> getMultipleAccounts(List<Long> accountIds);
 
     boolean isEmailAvailable(String email);
+
+    Account createAccount(AccountRequest accountRequest);
 
 }
