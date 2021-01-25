@@ -21,4 +21,6 @@ public interface AccountService {
 
     Account createAccount(AccountRequest accountRequest);
 
+    void confirmRegistration(String verificationToken);
+
 }

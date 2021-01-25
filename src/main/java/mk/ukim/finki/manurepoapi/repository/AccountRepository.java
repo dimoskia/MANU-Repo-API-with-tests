@@ -5,6 +5,7 @@ import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -25,5 +26,9 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
     List<MemberProjection> searchByName(@Param("term") String searchTerm, Pageable pageable);
 
     Boolean existsByEmail(String email);
+
+    @Modifying
+    @Query("UPDATE Account a set a.enabled = true where a.id = :accountId")
+    void enableAccount(@Param("accountId") Long accountId);
 
 }

@@ -3,14 +3,18 @@ package mk.ukim.finki.manurepoapi.service.impl;
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
 import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
+import mk.ukim.finki.manurepoapi.exception.InvalidTokenException;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.ProfileImage;
+import mk.ukim.finki.manurepoapi.model.VerificationToken;
 import mk.ukim.finki.manurepoapi.repository.AccountRepository;
 import mk.ukim.finki.manurepoapi.service.AccountService;
+import mk.ukim.finki.manurepoapi.service.VerificationTokenService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,6 +23,7 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
+    private final VerificationTokenService verificationTokenService;
 
     @Override
     public Account getAccount(Long accountId) {
@@ -62,6 +67,18 @@ public class AccountServiceImpl implements AccountService {
         Account account = new Account();
         BeanUtils.copyProperties(accountRequest, account);
         return accountRepository.save(account);
+    }
+
+    @Override
+    @Transactional
+    public void confirmRegistration(String token) {
+        VerificationToken verificationToken = verificationTokenService.getToken(token);
+        if (verificationTokenService.isTokenExpired(verificationToken)) {
+            throw new InvalidTokenException();
+        }
+        Long accountId = verificationToken.getAccount().getId();
+        accountRepository.enableAccount(accountId);
+        verificationTokenService.deleteToken(verificationToken);
     }
 
 }

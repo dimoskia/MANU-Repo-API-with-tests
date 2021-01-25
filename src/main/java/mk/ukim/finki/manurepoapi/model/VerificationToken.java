@@ -23,7 +23,7 @@ public class VerificationToken {
 
     private LocalDateTime expiration;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     private Account account;
 
     public VerificationToken(Account account) {
