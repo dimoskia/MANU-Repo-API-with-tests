@@ -68,4 +68,9 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @GetMapping("/emailAvailable")
+    public Boolean checkEmailAvailable(@RequestHeader String email) {
+        return accountService.isEmailAvailable(email);
+    }
+
 }
