@@ -1,5 +1,6 @@
 package mk.ukim.finki.manurepoapi.util;
 
+import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.dto.response.*;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.File;
@@ -79,4 +80,9 @@ public class DtoMapper {
     public static ManageRecordCard mapRecordToManageCard(Record record) {
         return modelMapper.map(record, ManageRecordCard.class);
     }
+
+    public static EditAccountRequest mapAccountToEditRequest(Account account) {
+        return modelMapper.map(account, EditAccountRequest.class);
+    }
+
 }

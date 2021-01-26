@@ -1,6 +1,7 @@
 package mk.ukim.finki.manurepoapi.service;
 
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
+import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.model.Account;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -24,5 +25,7 @@ public interface AccountService {
     void confirmRegistration(String verificationToken);
 
     void deleteExpiredAccounts();
+
+    Account editPersonalInfo(Long accountId, EditAccountRequest accountRequest);
 
 }

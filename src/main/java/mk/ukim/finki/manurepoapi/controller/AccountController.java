@@ -2,6 +2,7 @@ package mk.ukim.finki.manurepoapi.controller;
 
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
+import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.dto.response.MemberDetails;
 import mk.ukim.finki.manurepoapi.event.OnRegistrationCompleteEvent;
 import mk.ukim.finki.manurepoapi.exception.InvalidTokenException;
@@ -71,6 +72,19 @@ public class AccountController {
     @GetMapping("/emailAvailable")
     public Boolean checkEmailAvailable(@RequestHeader String email) {
         return accountService.isEmailAvailable(email);
+    }
+
+    @GetMapping("/{accountId}/edit")
+    public ResponseEntity<EditAccountRequest> getPersonalInfo(@PathVariable Long accountId) {
+        Account account = accountService.getAccount(accountId);
+        return new ResponseEntity<>(DtoMapper.mapAccountToEditRequest(account), HttpStatus.OK);
+    }
+
+    @PatchMapping("/{accountId}/edit")
+    public ResponseEntity<EditAccountRequest> editPersonalInfo(@PathVariable Long accountId,
+                                                               @Valid @RequestBody EditAccountRequest editAccountRequest) {
+        Account account = accountService.editPersonalInfo(accountId, editAccountRequest);
+        return new ResponseEntity<>(DtoMapper.mapAccountToEditRequest(account), HttpStatus.OK);
     }
 
 }

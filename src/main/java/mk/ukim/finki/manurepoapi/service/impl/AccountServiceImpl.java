@@ -2,6 +2,7 @@ package mk.ukim.finki.manurepoapi.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
+import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
 import mk.ukim.finki.manurepoapi.exception.InvalidTokenException;
 import mk.ukim.finki.manurepoapi.model.Account;
@@ -85,6 +86,13 @@ public class AccountServiceImpl implements AccountService {
     @Transactional
     public void deleteExpiredAccounts() {
         accountRepository.deleteExpiredAccounts();
+    }
+
+    @Override
+    public Account editPersonalInfo(Long accountId, EditAccountRequest accountRequest) {
+        Account account = getAccount(accountId);
+        BeanUtils.copyProperties(accountRequest, account);
+        return accountRepository.save(account);
     }
 
 }
