@@ -1,7 +1,6 @@
 package mk.ukim.finki.manurepoapi.repository;
 
 import mk.ukim.finki.manurepoapi.model.Account;
-import mk.ukim.finki.manurepoapi.repository.projection.AvatarProjection;
 import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -38,10 +37,5 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
     void deleteExpiredAccounts();
 
     Optional<Account> findByEmail(String email);
-
-    @Query("SELECT a.firstName as firstName, a.lastName as lastName, a.profileImage.id as profileImageId " +
-            "FROM Account a " +
-            "WHERE a.id = :accountId and a.enabled = true")
-    Optional<AvatarProjection> findAvatarData(@Param("accountId") Long accountId);
 
 }
