@@ -36,6 +36,6 @@ public interface AccountRepository extends JpaRepository<Account, Long>, JpaSpec
             "and a.id not in (select v.account_id from verification_token v)", nativeQuery = true)
     void deleteExpiredAccounts();
 
-    Optional<Account> findByEmail(String email);
+    Optional<Account> findByEmailAndEnabledTrue(String email);
 
 }
