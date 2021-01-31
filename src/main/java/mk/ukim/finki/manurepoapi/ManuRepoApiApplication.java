@@ -22,6 +22,7 @@ public class ManuRepoApiApplication {
             public void addCorsMappings(CorsRegistry registry) {
                 registry.addMapping("/**")
                         .allowedMethods("*")
+                        .allowedHeaders("*")
                         .allowedOrigins("http://localhost:4200");
             }
         };
