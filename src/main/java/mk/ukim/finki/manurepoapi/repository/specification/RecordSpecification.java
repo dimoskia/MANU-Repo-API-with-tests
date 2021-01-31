@@ -1,7 +1,7 @@
 package mk.ukim.finki.manurepoapi.repository.specification;
 
 import mk.ukim.finki.manurepoapi.dto.request.ManageRecordsFilter;
-import mk.ukim.finki.manurepoapi.dto.response.RecordsFilter;
+import mk.ukim.finki.manurepoapi.dto.request.RecordsFilter;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.model.Record;
 import org.springframework.data.jpa.domain.Specification;
