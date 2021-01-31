@@ -9,9 +9,11 @@ import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.ProfileImage;
 import mk.ukim.finki.manurepoapi.model.VerificationToken;
 import mk.ukim.finki.manurepoapi.repository.AccountRepository;
+import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 import mk.ukim.finki.manurepoapi.service.AccountService;
 import mk.ukim.finki.manurepoapi.service.VerificationTokenService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -33,8 +35,14 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void setProfileImage(Long accountId, MultipartFile imageFile) throws IOException {
-        Account account = getAccount(accountId);
+    public Account getAccount(Authentication authentication) {
+        Long accountId = ((UserPrincipal) authentication.getPrincipal()).getAccountId();
+        return getAccount(accountId);
+    }
+
+    @Override
+    public void setProfileImage(Authentication authentication, MultipartFile imageFile) throws IOException {
+        Account account = getAccount(authentication);
         ProfileImage profileImage = account.getProfileImage();
         if (profileImage == null) {
             profileImage = new ProfileImage(imageFile);
@@ -47,8 +55,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void deleteProfileImage(Long accountId) {
-        Account account = getAccount(accountId);
+    public void deleteProfileImage(Authentication authentication) {
+        Account account = getAccount(authentication);
         account.setProfileImage(null);
         accountRepository.save(account);
     }
@@ -89,8 +97,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account editPersonalInfo(Long accountId, EditAccountRequest accountRequest) {
-        Account account = getAccount(accountId);
+    public Account editPersonalInfo(Authentication authentication, EditAccountRequest accountRequest) {
+        Account account = getAccount(authentication);
         BeanUtils.copyProperties(accountRequest, account);
         return accountRepository.save(account);
     }

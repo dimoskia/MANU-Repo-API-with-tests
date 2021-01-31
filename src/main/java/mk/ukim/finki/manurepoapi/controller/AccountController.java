@@ -13,6 +13,7 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.mail.MailException;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -54,18 +55,18 @@ public class AccountController {
         response.sendRedirect("http://localhost:4200");
     }
 
-    @PutMapping("/{accountId}/profileImage")
-    public ResponseEntity<?> setProfileImage(@PathVariable Long accountId, @RequestParam MultipartFile imageFile) throws IOException {
+    @PutMapping("/profileImage")
+    public ResponseEntity<?> setProfileImage(Authentication authentication, @RequestParam MultipartFile imageFile) throws IOException {
         if (imageFile.getContentType() == null || !imageFile.getContentType().startsWith("image")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No image file present in the request");
         }
-        accountService.setProfileImage(accountId, imageFile);
+        accountService.setProfileImage(authentication, imageFile);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/{accountId}/profileImage")
-    public ResponseEntity<?> removeProfileImage(@PathVariable Long accountId) {
-        accountService.deleteProfileImage(accountId);
+    @DeleteMapping("/profileImage")
+    public ResponseEntity<?> removeProfileImage(Authentication authentication) {
+        accountService.deleteProfileImage(authentication);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -74,16 +75,16 @@ public class AccountController {
         return accountService.isEmailAvailable(email);
     }
 
-    @GetMapping("/{accountId}/edit")
-    public ResponseEntity<EditAccountRequest> getPersonalInfo(@PathVariable Long accountId) {
-        Account account = accountService.getAccount(accountId);
+    @GetMapping("/edit")
+    public ResponseEntity<EditAccountRequest> getPersonalInfo(Authentication authentication) {
+        Account account = accountService.getAccount(authentication);
         return new ResponseEntity<>(DtoMapper.mapAccountToEditRequest(account), HttpStatus.OK);
     }
 
-    @PatchMapping("/{accountId}/edit")
-    public ResponseEntity<EditAccountRequest> editPersonalInfo(@PathVariable Long accountId,
+    @PatchMapping("/edit")
+    public ResponseEntity<EditAccountRequest> editPersonalInfo(Authentication authentication,
                                                                @Valid @RequestBody EditAccountRequest editAccountRequest) {
-        Account account = accountService.editPersonalInfo(accountId, editAccountRequest);
+        Account account = accountService.editPersonalInfo(authentication, editAccountRequest);
         return new ResponseEntity<>(DtoMapper.mapAccountToEditRequest(account), HttpStatus.OK);
     }
 
