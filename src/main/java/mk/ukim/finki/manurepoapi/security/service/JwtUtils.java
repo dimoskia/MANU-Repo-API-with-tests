@@ -5,6 +5,7 @@ import com.auth0.jwt.JWTVerifier;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.auth0.jwt.interfaces.DecodedJWT;
+import mk.ukim.finki.manurepoapi.enums.Role;
 import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 
 import java.util.Date;
@@ -17,8 +18,8 @@ public class JwtUtils {
     public static String generateToken(UserPrincipal user) {
         long currentTimeMillis = System.currentTimeMillis();
         return JWT.create()
-                .withSubject(user.getUsername())
-                .withClaim("role", user.getRole())
+                .withSubject(user.getAccountId().toString())
+                .withClaim("role", user.getRole().toString())
                 .withIssuedAt(new Date(currentTimeMillis))
                 .withExpiresAt(new Date(currentTimeMillis + EXPIRATION_IN_HOURS * 60 * 60 * 1000))
                 .sign(Algorithm.HMAC512(SECRET.getBytes()));
@@ -30,10 +31,10 @@ public class JwtUtils {
                     .withClaimPresence("role")
                     .build();
             DecodedJWT decodedJWT = verifier.verify(jwt);
-            String username = decodedJWT.getSubject();
-            String role = decodedJWT.getClaim("role").asString();
-            return new UserPrincipal(username, role);
-        } catch (JWTVerificationException exception) {
+            Long accountId = Long.parseLong(decodedJWT.getSubject());
+            Role role = Role.valueOf(decodedJWT.getClaim("role").asString());
+            return new UserPrincipal(accountId, role);
+        } catch (JWTVerificationException | IllegalArgumentException exception) {
             return null;
         }
     }

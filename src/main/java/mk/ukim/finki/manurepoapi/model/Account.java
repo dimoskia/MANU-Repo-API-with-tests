@@ -61,4 +61,9 @@ public class Account {
         this.enabled = false;
     }
 
+    public Account(Long id, Role role) {
+        this.id = id;
+        this.role = role;
+    }
+
 }

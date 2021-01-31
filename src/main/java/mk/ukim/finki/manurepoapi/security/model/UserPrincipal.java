@@ -1,6 +1,7 @@
 package mk.ukim.finki.manurepoapi.security.model;
 
 import lombok.NoArgsConstructor;
+import mk.ukim.finki.manurepoapi.enums.Role;
 import mk.ukim.finki.manurepoapi.model.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -12,39 +13,30 @@ import java.util.List;
 @NoArgsConstructor
 public class UserPrincipal implements UserDetails {
 
-    private String email;
+    private Account account;
 
-    private String password;
-
-    private String role;
-
-    private boolean enabled;
-
-    public UserPrincipal(Account user) {
-        this.email = user.getEmail();
-        this.password = user.getPassword();
-        this.role = user.getRole().toString();
-        this.enabled = user.getEnabled();
+    public UserPrincipal(Account account) {
+        this.account = account;
     }
 
-    public UserPrincipal(String email, String role) {
-        this.email = email;
-        this.role = role;
+    public UserPrincipal(Long accountId, Role role) {
+        this.account = new Account(accountId, role);
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
+        String role = account.getRole().toString();
         return List.of(new SimpleGrantedAuthority(role));
     }
 
     @Override
     public String getPassword() {
-        return password;
+        return account.getPassword();
     }
 
     @Override
     public String getUsername() {
-        return email;
+        return account.getEmail();
     }
 
     @Override
@@ -64,11 +56,15 @@ public class UserPrincipal implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return enabled;
+        return account.getEnabled();
     }
 
-    public String getRole() {
-        return role;
+    public Role getRole() {
+        return account.getRole();
+    }
+
+    public Long getAccountId() {
+        return account.getId();
     }
 
 }
