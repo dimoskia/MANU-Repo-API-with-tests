@@ -7,6 +7,7 @@ import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.ProfileImage;
 import mk.ukim.finki.manurepoapi.repository.AccountRepository;
 import mk.ukim.finki.manurepoapi.repository.ProfileImageRepository;
+import mk.ukim.finki.manurepoapi.repository.projection.AvatarProjection;
 import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
 import mk.ukim.finki.manurepoapi.repository.specification.MemberSpecification;
 import mk.ukim.finki.manurepoapi.service.MemberService;
@@ -47,6 +48,12 @@ public class MemberServiceImpl implements MemberService {
     public List<MemberProjection> searchMembersByName(String query, Integer resultSize) {
         Pageable pageable = PageRequest.of(0, Math.min(15, resultSize));
         return accountRepository.searchByName(query, pageable);
+    }
+
+    @Override
+    public AvatarProjection getAvatarData(Long accountId) {
+        return accountRepository.findAvatarData(accountId)
+                .orElseThrow(() -> new EntityNotFoundException(Account.class, accountId));
     }
 
 }

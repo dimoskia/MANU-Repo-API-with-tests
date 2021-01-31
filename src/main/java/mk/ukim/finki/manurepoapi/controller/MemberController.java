@@ -1,11 +1,13 @@
 package mk.ukim.finki.manurepoapi.controller;
 
 import lombok.RequiredArgsConstructor;
+import mk.ukim.finki.manurepoapi.dto.response.Avatar;
 import mk.ukim.finki.manurepoapi.dto.response.MemberCard;
 import mk.ukim.finki.manurepoapi.dto.response.MemberDetails;
 import mk.ukim.finki.manurepoapi.dto.request.MembersFilter;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.ProfileImage;
+import mk.ukim.finki.manurepoapi.repository.projection.AvatarProjection;
 import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
 import mk.ukim.finki.manurepoapi.service.MemberService;
 import mk.ukim.finki.manurepoapi.util.DtoMapper;
@@ -13,6 +15,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.bind.annotation.*;
 
@@ -53,6 +57,12 @@ public class MemberController {
     public List<MemberProjection> searchMembersByName(@RequestParam String query,
                                                       @RequestParam(defaultValue = "10") Integer resultSize) {
         return memberService.searchMembersByName(query, resultSize);
+    }
+
+    @GetMapping("/{accountId}/avatar")
+    public ResponseEntity<Avatar> getAvatar(@PathVariable Long accountId) {
+        AvatarProjection avatarProjection = memberService.getAvatarData(accountId);
+        return new ResponseEntity<>(DtoMapper.mapToAvatar(avatarProjection), HttpStatus.OK);
     }
 
 }
