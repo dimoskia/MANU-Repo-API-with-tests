@@ -35,6 +35,14 @@ public class StatisticsServiceImpl implements StatisticsService {
         return new RecordStatistics(totalCount, perCollections, perDepartments, getMostRecentRecords(), getMostPopularRecords());
     }
 
+    @Override
+    public void refreshAllStats() {
+        recentRecordsViewRepository.refreshMaterializedView();
+        popularRecordsViewRepository.refreshMaterializedView();
+        recordsPerCollectionRepository.refreshMaterializedView();
+        recordsPerDepartmentRepository.refreshMaterializedView();
+    }
+
     private List<RecentRecord> getMostRecentRecords() {
         Sort sortCriteria = Sort.by(Sort.Direction.DESC, "dateArchived");
         return recentRecordsViewRepository.findAll(sortCriteria);
