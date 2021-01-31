@@ -67,4 +67,8 @@ public class UserPrincipal implements UserDetails {
         return account.getId();
     }
 
+    public Account getAccount() {
+        return account;
+    }
+
 }

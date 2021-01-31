@@ -1,10 +1,12 @@
 package mk.ukim.finki.manurepoapi.security.controller;
 
 import lombok.RequiredArgsConstructor;
+import mk.ukim.finki.manurepoapi.dto.response.Avatar;
 import mk.ukim.finki.manurepoapi.security.model.AuthenticationRequest;
 import mk.ukim.finki.manurepoapi.security.model.AuthenticationResponse;
 import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 import mk.ukim.finki.manurepoapi.security.service.JwtUtils;
+import mk.ukim.finki.manurepoapi.util.DtoMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -37,7 +39,8 @@ public class AuthenticationController {
             );
             UserPrincipal user = (UserPrincipal) authentication.getPrincipal();
             String jwt = JwtUtils.generateToken(user);
-            return new ResponseEntity<>(new AuthenticationResponse(jwt), HttpStatus.OK);
+            Avatar avatar = DtoMapper.mapAccountToAvatar(user.getAccount());
+            return new ResponseEntity<>(new AuthenticationResponse(jwt, avatar), HttpStatus.OK);
         } catch (BadCredentialsException exception) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No or invalid authentication details provided");
         }

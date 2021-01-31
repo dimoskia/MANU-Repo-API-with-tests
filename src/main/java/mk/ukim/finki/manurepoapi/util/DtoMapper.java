@@ -6,6 +6,8 @@ import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.File;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.repository.projection.AvatarProjection;
+import mk.ukim.finki.manurepoapi.security.model.AuthenticationResponse;
+import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -98,4 +100,15 @@ public class DtoMapper {
         return avatar;
     }
 
+    public static Avatar mapAccountToAvatar(Account account) {
+        Avatar avatar = modelMapper.map(account, Avatar.class);
+        if (account.getProfileImage() != null) {
+            String imageUrl = ServletUriComponentsBuilder.fromCurrentContextPath()
+                    .path("/members/profileImage/")
+                    .path(account.getProfileImage().getId().toString())
+                    .toUriString();
+            avatar.setImageUrl(imageUrl);
+        }
+        return avatar;
+    }
 }
