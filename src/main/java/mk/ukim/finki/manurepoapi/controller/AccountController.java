@@ -2,6 +2,7 @@ package mk.ukim.finki.manurepoapi.controller;
 
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
+import mk.ukim.finki.manurepoapi.dto.request.ChangePasswordRequest;
 import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.dto.response.Avatar;
 import mk.ukim.finki.manurepoapi.dto.response.MemberDetails;
@@ -87,6 +88,13 @@ public class AccountController {
                                                                @Valid @RequestBody EditAccountRequest editAccountRequest) {
         Account account = accountService.editPersonalInfo(authentication, editAccountRequest);
         return new ResponseEntity<>(DtoMapper.mapAccountToEditRequest(account), HttpStatus.OK);
+    }
+
+    @PatchMapping("/password")
+    public ResponseEntity<?> changePassword(Authentication authentication,
+                                            @RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
+        accountService.changePassword(authentication, changePasswordRequest);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
 }

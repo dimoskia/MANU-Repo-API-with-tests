@@ -2,6 +2,7 @@ package mk.ukim.finki.manurepoapi.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
+import mk.ukim.finki.manurepoapi.dto.request.ChangePasswordRequest;
 import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
 import mk.ukim.finki.manurepoapi.exception.InvalidTokenException;
@@ -13,9 +14,11 @@ import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 import mk.ukim.finki.manurepoapi.service.AccountService;
 import mk.ukim.finki.manurepoapi.service.VerificationTokenService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -101,6 +104,16 @@ public class AccountServiceImpl implements AccountService {
         Account account = getAccount(authentication);
         BeanUtils.copyProperties(accountRequest, account);
         return accountRepository.save(account);
+    }
+
+    @Override
+    public void changePassword(Authentication authentication, ChangePasswordRequest changePasswordRequest) {
+        Account account = getAccount(authentication);
+        if (!account.getPassword().equals(changePasswordRequest.getCurrentPassword())) {
+            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No or invalid authentication details provided");
+        }
+        account.setPassword(changePasswordRequest.getPassword());
+        accountRepository.save(account);
     }
 
 }

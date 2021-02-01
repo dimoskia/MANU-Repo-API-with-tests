@@ -1,6 +1,7 @@
 package mk.ukim.finki.manurepoapi.service;
 
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
+import mk.ukim.finki.manurepoapi.dto.request.ChangePasswordRequest;
 import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.model.Account;
 import org.springframework.security.core.Authentication;
@@ -30,5 +31,7 @@ public interface AccountService {
     void deleteExpiredAccounts();
 
     Account editPersonalInfo(Authentication authentication, EditAccountRequest accountRequest);
+
+    void changePassword(Authentication authentication, ChangePasswordRequest changePasswordRequest);
 
 }
