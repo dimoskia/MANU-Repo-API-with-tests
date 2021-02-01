@@ -15,7 +15,7 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @PasswordMatches
-public class AccountRequest {
+public class AccountRequest implements PasswordCredentials {
 
     @NotEmpty(message = "The email must not be empty")
     @Email(message = "Invalid email address")
