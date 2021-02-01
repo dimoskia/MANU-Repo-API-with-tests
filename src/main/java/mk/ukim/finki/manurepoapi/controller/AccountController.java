@@ -100,8 +100,8 @@ public class AccountController {
 
     @DeleteMapping
     public ResponseEntity<?> deleteAccount(Authentication authentication,
-                                           @RequestBody @Valid DeleteAccountRequest deleteAccountRequest) {
-        // TODO: 01-Feb-21 implement account deletion, what to do with records and authors field
+                                           @RequestHeader String password) {
+        accountService.deleteAccount(authentication, password);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
