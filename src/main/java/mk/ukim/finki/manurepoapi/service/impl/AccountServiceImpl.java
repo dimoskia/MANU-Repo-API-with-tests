@@ -102,7 +102,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account editPersonalInfo(Authentication authentication, EditAccountRequest accountRequest) {
         Account account = getAccount(authentication);
-        BeanUtils.copyProperties(accountRequest, account);
+        BeanUtils.copyProperties(accountRequest, account, "email");
         return accountRepository.save(account);
     }
 
