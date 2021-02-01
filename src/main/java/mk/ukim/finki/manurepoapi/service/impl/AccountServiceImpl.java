@@ -41,7 +41,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void setProfileImage(Authentication authentication, MultipartFile imageFile) throws IOException {
+    public Account setProfileImage(Authentication authentication, MultipartFile imageFile) throws IOException {
         Account account = getAccount(authentication);
         ProfileImage profileImage = account.getProfileImage();
         if (profileImage == null) {
@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
             profileImage.setContentType(imageFile.getContentType());
         }
         account.setProfileImage(profileImage);
-        accountRepository.save(account);
+        return accountRepository.save(account);
     }
 
     @Override

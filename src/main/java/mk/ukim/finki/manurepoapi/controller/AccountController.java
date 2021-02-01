@@ -3,6 +3,7 @@ package mk.ukim.finki.manurepoapi.controller;
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
 import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
+import mk.ukim.finki.manurepoapi.dto.response.Avatar;
 import mk.ukim.finki.manurepoapi.dto.response.MemberDetails;
 import mk.ukim.finki.manurepoapi.event.OnRegistrationCompleteEvent;
 import mk.ukim.finki.manurepoapi.exception.InvalidTokenException;
@@ -56,12 +57,12 @@ public class AccountController {
     }
 
     @PutMapping("/profileImage")
-    public ResponseEntity<?> setProfileImage(Authentication authentication, @RequestParam MultipartFile imageFile) throws IOException {
+    public ResponseEntity<Avatar> setProfileImage(Authentication authentication, @RequestParam MultipartFile imageFile) throws IOException {
         if (imageFile.getContentType() == null || !imageFile.getContentType().startsWith("image")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No image file present in the request");
         }
-        accountService.setProfileImage(authentication, imageFile);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        Account account = accountService.setProfileImage(authentication, imageFile);
+        return new ResponseEntity<>(DtoMapper.mapAccountToAvatar(account), HttpStatus.OK);
     }
 
     @DeleteMapping("/profileImage")
