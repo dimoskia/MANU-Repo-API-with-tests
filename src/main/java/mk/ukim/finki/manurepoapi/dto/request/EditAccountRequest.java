@@ -1,5 +1,6 @@
 package mk.ukim.finki.manurepoapi.dto.request;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.AcademicDegree;
@@ -13,6 +14,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 public class EditAccountRequest {
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private String email;
 
     @NotEmpty(message = "You must provide first name")
     private String firstName;
