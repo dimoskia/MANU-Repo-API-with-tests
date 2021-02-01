@@ -3,6 +3,7 @@ package mk.ukim.finki.manurepoapi.controller;
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
 import mk.ukim.finki.manurepoapi.dto.request.ChangePasswordRequest;
+import mk.ukim.finki.manurepoapi.dto.request.DeleteAccountRequest;
 import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.dto.response.Avatar;
 import mk.ukim.finki.manurepoapi.dto.response.MemberDetails;
@@ -94,6 +95,13 @@ public class AccountController {
     public ResponseEntity<?> changePassword(Authentication authentication,
                                             @RequestBody @Valid ChangePasswordRequest changePasswordRequest) {
         accountService.changePassword(authentication, changePasswordRequest);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
+
+    @DeleteMapping
+    public ResponseEntity<?> deleteAccount(Authentication authentication,
+                                           @RequestBody @Valid DeleteAccountRequest deleteAccountRequest) {
+        // TODO: 01-Feb-21 implement account deletion, what to do with records and authors field
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
