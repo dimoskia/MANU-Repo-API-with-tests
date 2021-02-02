@@ -6,6 +6,7 @@ import mk.ukim.finki.manurepoapi.dto.request.RecordsFilter;
 import mk.ukim.finki.manurepoapi.model.Record;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
 
 public interface RecordService {
 
@@ -19,7 +20,7 @@ public interface RecordService {
 
     void deleteRecord(Long recordId);
 
-    Record createRecord(RecordRequest recordRequest);
+    Record createRecord(Authentication authentication, RecordRequest recordRequest);
 
     Page<Record> getManageRecordsPage(ManageRecordsFilter filter, Pageable pageable, Long accountId);
 

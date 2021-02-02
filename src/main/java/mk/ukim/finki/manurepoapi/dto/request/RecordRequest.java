@@ -10,6 +10,7 @@ import mk.ukim.finki.manurepoapi.validator.PublicationStatusDate;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -20,7 +21,7 @@ public class RecordRequest {
     @NotEmpty(message = "Title must not be empty")
     private String title;
 
-    private List<Long> authorIds;
+    private List<Long> authorIds = new ArrayList<>();
 
     private Collection collection = Collection.OTHER;
 

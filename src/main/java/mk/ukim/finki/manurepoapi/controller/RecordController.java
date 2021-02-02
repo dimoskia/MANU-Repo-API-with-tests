@@ -15,6 +15,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -58,8 +59,9 @@ public class RecordController {
     }
 
     @PostMapping("/manage")
-    public ResponseEntity<RecordDetails> createRecord(@RequestBody @Valid RecordRequest recordRequest) {
-        Record record = recordService.createRecord(recordRequest);
+    public ResponseEntity<RecordDetails> createRecord(Authentication authentication,
+                                                      @RequestBody @Valid RecordRequest recordRequest) {
+        Record record = recordService.createRecord(authentication, recordRequest);
         RecordDetails recordDetails = DtoMapper.mapRecordToDetails(record);
         String locationUri = ServletUriComponentsBuilder.fromCurrentContextPath()
                 .pathSegment("records")

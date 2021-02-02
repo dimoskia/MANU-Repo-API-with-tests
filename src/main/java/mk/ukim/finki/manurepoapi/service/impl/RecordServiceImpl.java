@@ -9,6 +9,7 @@ import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.repository.RecordRepository;
 import mk.ukim.finki.manurepoapi.repository.specification.RecordSpecification;
+import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 import mk.ukim.finki.manurepoapi.service.AccountService;
 import mk.ukim.finki.manurepoapi.service.RecordService;
 import org.springframework.beans.BeanUtils;
@@ -16,6 +17,7 @@ import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
@@ -57,17 +59,19 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Record createRecord(RecordRequest recordRequest) {
+    public Record createRecord(Authentication authentication, RecordRequest recordRequest) {
         Record record = new Record();
         BeanUtils.copyProperties(recordRequest, record);
-        if (recordRequest.getAuthorIds() != null && recordRequest.getAuthorIds().size() > 0) {
-            List<Account> authorAccounts = accountService.getMultipleAccounts(recordRequest.getAuthorIds());
-            record.setAuthorAccounts(new HashSet<>(authorAccounts));
-            String authors = authorAccounts.stream()
-                    .map(account -> String.format("%s %s", account.getFirstName(), account.getLastName()))
-                    .collect(Collectors.joining(", "));
-            record.setAuthors(authors);
-        }
+
+        Long accountId = ((UserPrincipal) authentication.getPrincipal()).getAccountId();
+        recordRequest.getAuthorIds().add(accountId);
+        List<Account> authorAccounts = accountService.getMultipleAccounts(recordRequest.getAuthorIds());
+        record.setAuthorAccounts(new HashSet<>(authorAccounts));
+        String authors = authorAccounts.stream()
+                .map(account -> String.format("%s %s", account.getFirstName(), account.getLastName()))
+                .collect(Collectors.joining(", "));
+        record.setAuthors(authors);
+
         return recordRepository.save(record);
     }
 
