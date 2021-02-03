@@ -17,16 +17,12 @@ public class DtoMapper {
     private static final ModelMapper modelMapper = new ModelMapper();
 
     public static RecordCard mapRecordToCard(Record record) {
-        RecordCard recordCard = modelMapper.map(record, RecordCard.class);
-        recordCard.setDateArchived(record.getDateArchived().toLocalDate());
-        return recordCard;
+        return modelMapper.map(record, RecordCard.class);
     }
 
     public static RecordDetails mapRecordToDetails(Record record) {
         RecordDetails recordDetails = new RecordDetails();
-        BeanUtils.copyProperties(record, recordDetails, "dateArchived", "files", "authors");
-
-        recordDetails.setDateArchived(record.getDateArchived().toLocalDate());
+        BeanUtils.copyProperties(record, recordDetails, "files", "authors");
 
         Set<FileResponse> files = record.getFiles().stream()
                 .map(DtoMapper::mapFileToResponse)

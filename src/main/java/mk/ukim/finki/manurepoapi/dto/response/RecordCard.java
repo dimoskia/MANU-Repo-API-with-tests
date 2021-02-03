@@ -5,7 +5,7 @@ import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.enums.Department;
 
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -27,7 +27,7 @@ public class RecordCard {
 
     private Integer downloadsCount;
 
-    private LocalDate dateArchived;
+    private LocalDateTime dateArchived;
 
     public String getDepartment() {
         return department == null ? null : department.getFullDepartment();

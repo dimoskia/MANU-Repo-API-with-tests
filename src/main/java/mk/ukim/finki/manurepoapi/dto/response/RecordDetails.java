@@ -7,6 +7,7 @@ import mk.ukim.finki.manurepoapi.enums.Department;
 import mk.ukim.finki.manurepoapi.enums.PublicationStatus;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Set;
 
 @Getter
@@ -27,7 +28,7 @@ public class RecordDetails {
 
     private Integer downloadsCount;
 
-    private LocalDate dateArchived;
+    private LocalDateTime dateArchived;
 
     private String descriptionOrAbstract;
 
