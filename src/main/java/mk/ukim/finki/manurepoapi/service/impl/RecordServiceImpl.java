@@ -21,6 +21,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -91,6 +92,12 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public Record getRecordRef(Long recordId) {
         return recordRepository.getOne(recordId);
+    }
+
+    @Override
+    @Transactional
+    public void incrementDownloads(Long recordId) {
+        recordRepository.incrementDownloads(recordId);
     }
 
     @Override

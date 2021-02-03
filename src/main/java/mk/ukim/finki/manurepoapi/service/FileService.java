@@ -11,7 +11,7 @@ public interface FileService {
 
     File getPublicFile(Long fileId);
 
-    File getFile(Long fileId);
+    File downloadFile(Long fileId);
 
     void removeFile(Long fileId);
 

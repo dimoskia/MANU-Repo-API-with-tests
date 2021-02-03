@@ -28,4 +28,6 @@ public interface RecordService {
 
     Record getRecordRef(Long recordId);
 
+    void incrementDownloads(Long recordId);
+
 }
