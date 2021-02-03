@@ -12,7 +12,7 @@ import java.util.Date;
 
 public class JwtUtils {
 
-    private static final String SECRET = "SecretKeyToGenJWTs";
+    private static final String SECRET = "gN5fNdsDPM7EBvfgtf9l5qIY8XeDdr8MG4Sd1Nqbh4SmQIMi71H2XrFSmPXgGhN";
     private static final int EXPIRATION_IN_HOURS = 3;
 
     public static String generateToken(UserPrincipal user) {
