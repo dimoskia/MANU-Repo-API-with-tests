@@ -3,6 +3,7 @@ package mk.ukim.finki.manurepoapi.controller;
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
 import mk.ukim.finki.manurepoapi.dto.request.ChangePasswordRequest;
+import mk.ukim.finki.manurepoapi.dto.request.CheckEmailRequest;
 import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.dto.response.Avatar;
 import mk.ukim.finki.manurepoapi.dto.response.MemberDetails;
@@ -74,8 +75,8 @@ public class AccountController {
     }
 
     @GetMapping("/emailAvailable")
-    public Boolean checkEmailAvailable(@RequestHeader String email) {
-        return accountService.isEmailAvailable(email);
+    public Boolean checkEmailAvailable(@RequestBody @Valid CheckEmailRequest emailRequest) {
+        return accountService.isEmailAvailable(emailRequest.getEmail());
     }
 
     @GetMapping("/edit")
