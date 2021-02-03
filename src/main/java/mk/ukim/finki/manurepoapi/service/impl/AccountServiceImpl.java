@@ -16,6 +16,7 @@ import mk.ukim.finki.manurepoapi.service.VerificationTokenService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.server.ResponseStatusException;
@@ -30,6 +31,7 @@ public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
     private final VerificationTokenService verificationTokenService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Account getAccount(Long accountId) {
@@ -84,6 +86,7 @@ public class AccountServiceImpl implements AccountService {
     public Account createAccount(AccountRequest accountRequest) {
         Account account = new Account();
         BeanUtils.copyProperties(accountRequest, account);
+        account.setPassword(passwordEncoder.encode(accountRequest.getPassword()));
         return accountRepository.save(account);
     }
 
@@ -115,17 +118,17 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void changePassword(Authentication authentication, ChangePasswordRequest changePasswordRequest) {
         Account account = getAccount(authentication);
-        if (!account.getPassword().equals(changePasswordRequest.getCurrentPassword())) {
+        if (!passwordEncoder.matches(changePasswordRequest.getCurrentPassword(), account.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No or invalid authentication details provided");
         }
-        account.setPassword(changePasswordRequest.getPassword());
+        account.setPassword(passwordEncoder.encode(changePasswordRequest.getPassword()));
         accountRepository.save(account);
     }
 
     @Override
     public void deleteAccount(Authentication authentication, String password) {
         Account account = getAccount(authentication);
-        if (!account.getPassword().equals(password)) {
+        if (!passwordEncoder.matches(password, account.getPassword())) {
             throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No or invalid authentication details provided");
         }
         // TODO: 01-Feb-21 implement account deletion: what to do with records, with authors field in records etc.
