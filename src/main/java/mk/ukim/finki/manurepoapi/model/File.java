@@ -10,6 +10,9 @@ import javax.persistence.*;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@NamedEntityGraph(name = "File.fileData",
+        attributeNodes = @NamedAttributeNode("fileData")
+)
 public class File {
 
     @Id

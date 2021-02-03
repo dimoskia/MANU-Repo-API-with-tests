@@ -47,7 +47,7 @@ public class FileServiceImpl implements FileService {
 
     @Override
     public File getFile(Long fileId) {
-        return fileRepository.findById(fileId).orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
+        return fileRepository.fetchFileWithData(fileId).orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
     }
 
     @Override
