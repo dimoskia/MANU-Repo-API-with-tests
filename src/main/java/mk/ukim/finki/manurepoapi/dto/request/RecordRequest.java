@@ -6,6 +6,7 @@ import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.enums.Department;
 import mk.ukim.finki.manurepoapi.enums.PublicationStatus;
 import mk.ukim.finki.manurepoapi.validator.PublicationStatusDate;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -19,6 +20,7 @@ import java.util.List;
 public class RecordRequest {
 
     @NotEmpty(message = "Title must not be empty")
+    @Length(max = 256)
     private String title;
 
     private List<Long> authorIds = new ArrayList<>();
@@ -29,13 +31,16 @@ public class RecordRequest {
     private Department department;
 
     @NotEmpty(message = "Subject must not be empty")
+    @Length(max = 64)
     private String subject;
 
     @NotEmpty(message = "A description or abstract must be provided")
     private String descriptionOrAbstract;
 
+    @Length(max = 128)
     private String keywords;
 
+    @Length(max = 64)
     private String language;
 
     private Integer numPages;

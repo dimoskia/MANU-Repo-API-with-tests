@@ -7,6 +7,7 @@ import mk.ukim.finki.manurepoapi.enums.MemberType;
 import mk.ukim.finki.manurepoapi.validator.EmailAvailable;
 import mk.ukim.finki.manurepoapi.validator.PasswordMatches;
 import mk.ukim.finki.manurepoapi.validator.ValidPassword;
+import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -20,6 +21,7 @@ public class AccountRequest implements PasswordCredentials {
     @NotEmpty(message = "The email must not be empty")
     @Email(message = "Invalid email address")
     @EmailAvailable
+    @Length(max = 254)
     private String email;
 
     @ValidPassword
@@ -28,9 +30,11 @@ public class AccountRequest implements PasswordCredentials {
     private String confirmPassword;
 
     @NotEmpty(message = "You must provide first name")
+    @Length(max = 32)
     private String firstName;
 
     @NotEmpty(message = "You must provide last name")
+    @Length(max = 32)
     private String lastName;
 
     @NotNull(message = "You must provide a member type")
