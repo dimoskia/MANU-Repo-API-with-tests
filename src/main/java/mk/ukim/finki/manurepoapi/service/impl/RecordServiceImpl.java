@@ -13,7 +13,6 @@ import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 import mk.ukim.finki.manurepoapi.service.AccountService;
 import mk.ukim.finki.manurepoapi.service.RecordService;
 import org.springframework.beans.BeanUtils;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -81,6 +80,17 @@ public class RecordServiceImpl implements RecordService {
         Long accountId = ((UserPrincipal) authentication.getPrincipal()).getAccountId();
         Specification<Record> recordSpecification = RecordSpecification.manageRecordsSpec(filter, accountId);
         return recordRepository.findAll(recordSpecification, pageable);
+    }
+
+    @Override
+    public boolean checkRecordPermissions(Long recordId, Authentication authentication) {
+        Account accountRef = accountService.getAccountRef(authentication);
+        return recordRepository.existsByIdAndAuthorAccountsContaining(recordId, accountRef);
+    }
+
+    @Override
+    public Record getRecordRef(Long recordId) {
+        return recordRepository.getOne(recordId);
     }
 
     @Override

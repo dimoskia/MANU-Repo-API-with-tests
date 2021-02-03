@@ -24,4 +24,8 @@ public interface RecordService {
 
     Page<Record> getManageRecordsPage(ManageRecordsFilter filter, Pageable pageable, Authentication authentication);
 
+    boolean checkRecordPermissions(Long recordId, Authentication authentication);
+
+    Record getRecordRef(Long recordId);
+
 }
