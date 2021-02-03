@@ -50,10 +50,11 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public void deleteRecord(Long recordId) {
-        try {
+    public void deleteRecord(Authentication authentication, Long recordId) {
+        Account account = accountService.getAccountRef(authentication);
+        if (recordRepository.existsByIdAndAuthorAccountsContaining(recordId, account)) {
             recordRepository.deleteById(recordId);
-        } catch (EmptyResultDataAccessException exception) {
+        } else {
             throw new EntityNotFoundException(Record.class, recordId);
         }
     }

@@ -71,8 +71,8 @@ public class RecordController {
     }
 
     @DeleteMapping("/manage/{recordId}")
-    public ResponseEntity<?> deleteRecord(@PathVariable Long recordId) {
-        recordService.deleteRecord(recordId);
+    public ResponseEntity<?> deleteRecord(Authentication authentication, @PathVariable Long recordId) {
+        recordService.deleteRecord(authentication, recordId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

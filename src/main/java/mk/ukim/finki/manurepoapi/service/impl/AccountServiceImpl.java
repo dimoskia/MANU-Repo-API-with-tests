@@ -44,6 +44,12 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Account getAccountRef(Authentication authentication) {
+        Long accountId = ((UserPrincipal) authentication.getPrincipal()).getAccountId();
+        return accountRepository.getOne(accountId);
+    }
+
+    @Override
     public Account setProfileImage(Authentication authentication, MultipartFile imageFile) throws IOException {
         Account account = getAccount(authentication);
         ProfileImage profileImage = account.getProfileImage();

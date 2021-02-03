@@ -16,6 +16,8 @@ public interface AccountService {
 
     Account getAccount(Authentication authentication);
 
+    Account getAccountRef(Authentication authentication);
+
     Account setProfileImage(Authentication authentication, MultipartFile imageFile) throws IOException;
 
     void deleteProfileImage(Authentication authentication);
