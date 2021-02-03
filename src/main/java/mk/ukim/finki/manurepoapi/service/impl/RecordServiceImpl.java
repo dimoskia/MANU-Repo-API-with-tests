@@ -76,7 +76,8 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Page<Record> getManageRecordsPage(ManageRecordsFilter filter, Pageable pageable, Long accountId) {
+    public Page<Record> getManageRecordsPage(ManageRecordsFilter filter, Pageable pageable, Authentication authentication) {
+        Long accountId = ((UserPrincipal) authentication.getPrincipal()).getAccountId();
         Specification<Record> recordSpecification = RecordSpecification.manageRecordsSpec(filter, accountId);
         return recordRepository.findAll(recordSpecification, pageable);
     }

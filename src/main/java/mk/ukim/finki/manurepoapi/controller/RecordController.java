@@ -49,12 +49,12 @@ public class RecordController {
         return statisticsService.getRecordStatistics();
     }
 
-    @GetMapping("/manage/{accountId}")
+    @GetMapping("/manage")
     public Page<ManageRecordCard> getRecordsPageForAccount(
-            @PathVariable Long accountId,
+            Authentication authentication,
             ManageRecordsFilter recordsFilter,
-            @PageableDefault(sort = "dateArchived", direction = Sort.Direction.DESC) Pageable pageable) {
-        Page<Record> recordsPage = recordService.getManageRecordsPage(recordsFilter, pageable, accountId);
+            @PageableDefault(sort = "dateArchived", direction = Sort.Direction.DESC, value = 12) Pageable pageable) {
+        Page<Record> recordsPage = recordService.getManageRecordsPage(recordsFilter, pageable, authentication);
         return recordsPage.map(DtoMapper::mapRecordToManageCard);
     }
 

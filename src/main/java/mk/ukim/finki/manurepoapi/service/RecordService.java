@@ -22,6 +22,6 @@ public interface RecordService {
 
     Record createRecord(Authentication authentication, RecordRequest recordRequest);
 
-    Page<Record> getManageRecordsPage(ManageRecordsFilter filter, Pageable pageable, Long accountId);
+    Page<Record> getManageRecordsPage(ManageRecordsFilter filter, Pageable pageable, Authentication authentication);
 
 }
