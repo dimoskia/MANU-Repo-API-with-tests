@@ -19,4 +19,6 @@ public interface RecordRepository extends JpaRepository<Record, Long>, JpaSpecif
 
     boolean existsByIdAndAuthorAccountsContaining(Long recordId, Account account);
 
+    Optional<Record> findByIdAndAuthorAccountsContaining(Long recordId, Account account);
+
 }

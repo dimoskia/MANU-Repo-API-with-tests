@@ -16,8 +16,10 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.HashSet;
 import java.util.List;
@@ -50,12 +52,10 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public void deleteRecord(Authentication authentication, Long recordId) {
-        Account account = accountService.getAccountRef(authentication);
-        if (recordRepository.existsByIdAndAuthorAccountsContaining(recordId, account)) {
-            recordRepository.deleteById(recordId);
-        } else {
-            throw new EntityNotFoundException(Record.class, recordId);
-        }
+        Account accountRef = accountService.getAccountRef(authentication);
+        Record recordToDelete = recordRepository.findByIdAndAuthorAccountsContaining(recordId, accountRef)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.BAD_REQUEST));
+        recordRepository.delete(recordToDelete);
     }
 
     @Override
