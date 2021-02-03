@@ -3,7 +3,6 @@ package mk.ukim.finki.manurepoapi.controller;
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
 import mk.ukim.finki.manurepoapi.dto.request.ChangePasswordRequest;
-import mk.ukim.finki.manurepoapi.dto.request.DeleteAccountRequest;
 import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.dto.response.Avatar;
 import mk.ukim.finki.manurepoapi.dto.response.MemberDetails;
@@ -59,7 +58,8 @@ public class AccountController {
     }
 
     @PutMapping("/profileImage")
-    public ResponseEntity<Avatar> setProfileImage(Authentication authentication, @RequestParam MultipartFile imageFile) throws IOException {
+    public ResponseEntity<Avatar> setProfileImage(Authentication authentication,
+                                                  @RequestParam MultipartFile imageFile) throws IOException {
         if (imageFile.getContentType() == null || !imageFile.getContentType().startsWith("image")) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No image file present in the request");
         }
@@ -99,8 +99,7 @@ public class AccountController {
     }
 
     @DeleteMapping
-    public ResponseEntity<?> deleteAccount(Authentication authentication,
-                                           @RequestHeader String password) {
+    public ResponseEntity<?> deleteAccount(Authentication authentication, @RequestHeader String password) {
         accountService.deleteAccount(authentication, password);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
