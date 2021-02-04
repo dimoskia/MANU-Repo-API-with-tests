@@ -53,4 +53,10 @@ public class StatisticsServiceImpl implements StatisticsService {
         return popularRecordsViewRepository.findAll(sortCriteria);
     }
 
+    @Override
+    public void refreshRecentAndPopular() {
+        recentRecordsViewRepository.refreshMaterializedView();
+        popularRecordsViewRepository.refreshMaterializedView();
+    }
+
 }

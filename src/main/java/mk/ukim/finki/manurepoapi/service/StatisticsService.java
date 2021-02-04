@@ -8,4 +8,6 @@ public interface StatisticsService {
 
     void refreshAllStats();
 
+    void refreshRecentAndPopular();
+
 }
