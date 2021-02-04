@@ -29,12 +29,9 @@ public class FileController {
     public ResponseEntity<FileResponse> addFileToRecord(Authentication authentication,
                                                         @RequestParam(name = "file") MultipartFile multipartFile,
                                                         @PathVariable Long recordId) throws IOException {
-        if (recordService.checkRecordPermissions(recordId, authentication)) {
-            File file = fileService.saveFileToRecord(multipartFile, recordId);
-            FileResponse fileResponse = DtoMapper.mapFileToResponse(file);
-            return ResponseEntity.created(URI.create(fileResponse.getFileDownloadUri())).body(fileResponse);
-        }
-        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        File file = fileService.saveFileToRecord(multipartFile, recordId, authentication);
+        FileResponse fileResponse = DtoMapper.mapFileToResponse(file);
+        return ResponseEntity.created(URI.create(fileResponse.getFileDownloadUri())).body(fileResponse);
     }
 
     @GetMapping("/{fileId}")

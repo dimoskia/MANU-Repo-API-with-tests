@@ -9,8 +9,11 @@ import mk.ukim.finki.manurepoapi.repository.FileRepository;
 import mk.ukim.finki.manurepoapi.service.FileService;
 import mk.ukim.finki.manurepoapi.service.RecordService;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -23,7 +26,10 @@ public class FileServiceImpl implements FileService {
     private final RecordService recordService;
 
     @Override
-    public File saveFileToRecord(MultipartFile multipartFile, Long recordId) throws IOException {
+    public File saveFileToRecord(MultipartFile multipartFile, Long recordId, Authentication authentication) throws IOException {
+        if (!recordService.checkRecordPermissions(recordId, authentication)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
+        }
         Optional<String> contentTypeOptional = Optional.ofNullable(multipartFile.getContentType());
         Record record = recordService.getRecordRef(recordId);
         File file = File.builder()
