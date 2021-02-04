@@ -54,9 +54,23 @@ public class StatisticsServiceImpl implements StatisticsService {
     }
 
     @Override
-    public void refreshRecentAndPopular() {
+    public void refreshRecentRecordStats() {
         recentRecordsViewRepository.refreshMaterializedView();
+    }
+
+    @Override
+    public void refreshPopularRecordStats() {
         popularRecordsViewRepository.refreshMaterializedView();
+    }
+
+    @Override
+    public Boolean isRecentRecord(Long recordId) {
+        return recentRecordsViewRepository.existsById(recordId);
+    }
+
+    @Override
+    public Boolean isPopularRecord(Long recordId) {
+        return popularRecordsViewRepository.existsById(recordId);
     }
 
 }

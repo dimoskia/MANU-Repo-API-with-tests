@@ -5,10 +5,12 @@ import mk.ukim.finki.manurepoapi.dto.request.ManageRecordsFilter;
 import mk.ukim.finki.manurepoapi.dto.request.RecordRequest;
 import mk.ukim.finki.manurepoapi.dto.request.RecordsFilter;
 import mk.ukim.finki.manurepoapi.dto.response.*;
+import mk.ukim.finki.manurepoapi.event.OnRecordDeletedEvent;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.service.RecordService;
 import mk.ukim.finki.manurepoapi.service.StatisticsService;
 import mk.ukim.finki.manurepoapi.util.DtoMapper;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -29,6 +31,7 @@ public class RecordController {
 
     private final RecordService recordService;
     private final StatisticsService statisticsService;
+    private final ApplicationEventPublisher eventPublisher;
 
     @GetMapping("/browse")
     public Page<RecordCard> getRecordsPage(
@@ -73,6 +76,7 @@ public class RecordController {
     @DeleteMapping("/manage/{recordId}")
     public ResponseEntity<?> deleteRecord(Authentication authentication, @PathVariable Long recordId) {
         recordService.deleteRecord(authentication, recordId);
+        eventPublisher.publishEvent(new OnRecordDeletedEvent(recordId));
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

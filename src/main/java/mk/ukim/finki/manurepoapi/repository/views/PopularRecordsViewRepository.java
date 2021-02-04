@@ -14,4 +14,5 @@ public interface PopularRecordsViewRepository extends JpaRepository<PopularRecor
     @Modifying(clearAutomatically = true)
     @Query(value = "REFRESH MATERIALIZED VIEW CONCURRENTLY popular_record", nativeQuery = true)
     void refreshMaterializedView();
+
 }

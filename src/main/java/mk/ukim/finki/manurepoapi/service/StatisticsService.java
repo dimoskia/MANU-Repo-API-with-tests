@@ -8,6 +8,12 @@ public interface StatisticsService {
 
     void refreshAllStats();
 
-    void refreshRecentAndPopular();
+    void refreshRecentRecordStats();
+
+    void refreshPopularRecordStats();
+
+    Boolean isRecentRecord(Long recordId);
+
+    Boolean isPopularRecord(Long recordId);
 
 }
