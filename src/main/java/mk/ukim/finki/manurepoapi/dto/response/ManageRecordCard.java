@@ -33,4 +33,8 @@ public class ManageRecordCard {
 
     private Boolean privateRecord;
 
+    public String getCollectionName() {
+        return collection.getFullCollection();
+    }
+
 }
