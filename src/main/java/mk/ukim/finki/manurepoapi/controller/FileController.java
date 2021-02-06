@@ -36,7 +36,7 @@ public class FileController {
 
     @GetMapping("/{fileId}")
     public void downloadFile(@PathVariable Long fileId, HttpServletResponse response) throws IOException {
-        File file = fileService.downloadFile(fileId);
+        File file = fileService.downloadPublicFile(fileId);
         response.setContentType(file.getContentType());
         response.setContentLengthLong(file.getSize());
         response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getFileName() + "\"");

@@ -53,10 +53,15 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public File downloadFile(Long fileId) {
+    public File downloadPublicFile(Long fileId) {
         File publicFile = getPublicFile(fileId);
         recordService.incrementDownloads(publicFile.getRecord().getId());
         return publicFile;
+    }
+
+    @Override
+    public File getFile(Long fileId) {
+        return fileRepository.findById(fileId).orElseThrow(() -> new EntityNotFoundException(File.class, fileId));
     }
 
     @Override
