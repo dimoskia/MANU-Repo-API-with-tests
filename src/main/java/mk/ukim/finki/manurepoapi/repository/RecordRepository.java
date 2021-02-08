@@ -16,6 +16,10 @@ public interface RecordRepository extends JpaRepository<Record, Long>, JpaSpecif
     @EntityGraph(value = "Record.authorAccounts")
     Optional<Record> findByIdAndApprovedTrueAndPrivateRecordFalse(Long recordId);
 
+    @EntityGraph(value = "Record.authorAccounts")
+    @Query("SELECT r from Record r WHERE r.id = :recordId")
+    Optional<Record> fetchRecordWithAuthors(@Param("recordId") Long recordId);
+
     boolean existsByIdAndAuthorAccountsContaining(Long recordId, Account account);
 
     Optional<Record> findByIdAndAuthorAccountsContaining(Long recordId, Account account);

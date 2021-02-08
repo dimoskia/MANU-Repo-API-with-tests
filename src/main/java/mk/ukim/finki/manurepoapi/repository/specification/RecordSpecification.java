@@ -1,5 +1,6 @@
 package mk.ukim.finki.manurepoapi.repository.specification;
 
+import mk.ukim.finki.manurepoapi.dto.request.AdminRecordsFilter;
 import mk.ukim.finki.manurepoapi.dto.request.ManageRecordsFilter;
 import mk.ukim.finki.manurepoapi.dto.request.RecordsFilter;
 import mk.ukim.finki.manurepoapi.enums.Collection;
@@ -26,11 +27,18 @@ public class RecordSpecification {
 
     public static Specification<Record> manageRecordsSpec(ManageRecordsFilter filter, Long accountId) {
         return Specification.where(SpecificationUtils.<Record>propertyContains("title", filter.getTitle()))
-                .and(SpecificationUtils.propertyEquals("collection", filter.getCollection()))
+                .and(propertyEquals("collection", filter.getCollection()))
                 .and(isArchivedInYear(filter.getYear()))
-                .and(SpecificationUtils.propertyEquals("privateRecord", filter.getPrivateRecord()))
-                .and(SpecificationUtils.propertyEquals("approved", filter.getApproved()))
+                .and(propertyEquals("privateRecord", filter.getPrivateRecord()))
+                .and(propertyEquals("approved", filter.getApproved()))
                 .and(isFromAuthor(accountId));
+    }
+
+    public static Specification<Record> adminRecordsSpec(AdminRecordsFilter filter) {
+        return Specification.where(SpecificationUtils.<Record>propertyContains("title", filter.getTitle()))
+                .and(propertyContains("authors", filter.getAuthor()))
+                .and(propertyEquals("collection", filter.getCollection()))
+                .and(propertyEquals("approved", false));
     }
 
     private static Specification<Record> searchByTitleOrKeyword(String searchTerm) {

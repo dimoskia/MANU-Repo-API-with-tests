@@ -37,6 +37,35 @@ public class DtoMapper {
         return recordDetails;
     }
 
+    public static RecordDetails mapRecordToAdminDetails(Record record) {
+        RecordDetails recordDetails = new RecordDetails();
+        BeanUtils.copyProperties(record, recordDetails, "files", "authors");
+
+        Set<FileResponse> files = record.getFiles().stream()
+                .map(DtoMapper::mapFileToAdminResponse)
+                .collect(Collectors.toSet());
+        recordDetails.setFiles(files);
+
+        Set<MemberCard> authors = record.getAuthorAccounts().stream()
+                .map(DtoMapper::mapAccountToMemberCard)
+                .collect(Collectors.toSet());
+        recordDetails.setAuthors(authors);
+
+        return recordDetails;
+    }
+
+    public static FileResponse mapFileToAdminResponse(File file) {
+        FileResponse fileResponse = new FileResponse();
+        BeanUtils.copyProperties(file, fileResponse);
+        String downloadUri = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .pathSegment("admin")
+                .pathSegment("files")
+                .path(file.getId().toString())
+                .toUriString();
+        fileResponse.setFileDownloadUri(downloadUri);
+        return fileResponse;
+    }
+
 
     public static FileResponse mapFileToResponse(File file) {
         FileResponse fileResponse = new FileResponse();
