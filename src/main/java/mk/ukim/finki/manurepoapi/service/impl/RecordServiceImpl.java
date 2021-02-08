@@ -46,12 +46,6 @@ public class RecordServiceImpl implements RecordService {
     }
 
     @Override
-    public Record getRecord(Long recordId) {
-        return recordRepository.findById(recordId)
-                .orElseThrow(() -> new EntityNotFoundException(Record.class, recordId));
-    }
-
-    @Override
     public void deleteRecord(Authentication authentication, Long recordId) {
         Account accountRef = accountService.getAccountRef(authentication);
         Record recordToDelete = recordRepository.findByIdAndAuthorAccountsContaining(recordId, accountRef)

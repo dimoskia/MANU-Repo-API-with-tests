@@ -16,8 +16,6 @@ public interface RecordService {
 
     boolean isRecordPublic(Long recordId);
 
-    Record getRecord(Long recordId);
-
     void deleteRecord(Authentication authentication, Long recordId);
 
     Record createRecord(Authentication authentication, RecordRequest recordRequest);
