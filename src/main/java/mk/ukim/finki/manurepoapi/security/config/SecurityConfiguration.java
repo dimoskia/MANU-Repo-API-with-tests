@@ -3,6 +3,7 @@ package mk.ukim.finki.manurepoapi.security.config;
 import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.security.filter.JwtRequestFilter;
 import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -28,7 +29,13 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.cors();
         http.csrf().disable().authorizeRequests()
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/accounts", "/accounts/confirmRegistration", "/accounts/emailAvailable").permitAll()
+                .antMatchers("/accounts/**").authenticated()
+                .antMatchers(HttpMethod.POST, "/files").authenticated()
+                .antMatchers("/records/manage").authenticated()
                 .anyRequest().permitAll()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
