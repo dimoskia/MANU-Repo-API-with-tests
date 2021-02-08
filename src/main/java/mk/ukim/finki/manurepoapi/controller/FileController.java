@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.response.FileResponse;
 import mk.ukim.finki.manurepoapi.model.File;
 import mk.ukim.finki.manurepoapi.service.FileService;
-import mk.ukim.finki.manurepoapi.service.RecordService;
 import mk.ukim.finki.manurepoapi.util.DtoMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +22,6 @@ import java.net.URI;
 public class FileController {
 
     private final FileService fileService;
-    private final RecordService recordService;
 
     @PostMapping("/{recordId}")
     public ResponseEntity<FileResponse> addFileToRecord(Authentication authentication,

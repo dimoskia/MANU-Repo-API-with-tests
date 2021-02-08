@@ -10,8 +10,6 @@ public interface FileService {
 
     File saveFileToRecord(MultipartFile multipartFile, Long recordId, Authentication authentication) throws IOException;
 
-    File getPublicFile(Long fileId);
-
     File downloadPublicFile(Long fileId);
 
     File getFile(Long fileId);
