@@ -80,4 +80,12 @@ public class RecordController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
+    @PatchMapping("/manage/{recordId}")
+    public ResponseEntity<RecordDetails> editRecord(Authentication authentication,
+                                                    @PathVariable Long recordId,
+                                                    @RequestBody @Valid RecordRequest recordRequest) {
+        Record record = recordService.editRecord(authentication, recordId, recordRequest);
+        return new ResponseEntity<>(DtoMapper.mapRecordToDetails(record), HttpStatus.OK);
+    }
+
 }

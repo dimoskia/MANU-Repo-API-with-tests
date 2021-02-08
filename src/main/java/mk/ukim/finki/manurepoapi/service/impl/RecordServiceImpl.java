@@ -55,18 +55,7 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public Record createRecord(Authentication authentication, RecordRequest recordRequest) {
-        Record record = new Record();
-        BeanUtils.copyProperties(recordRequest, record);
-
-        Long accountId = ((UserPrincipal) authentication.getPrincipal()).getAccountId();
-        recordRequest.getAuthorIds().add(accountId);
-        List<Account> authorAccounts = accountService.getMultipleAccounts(recordRequest.getAuthorIds());
-        record.setAuthorAccounts(new HashSet<>(authorAccounts));
-        String authors = authorAccounts.stream()
-                .map(account -> String.format("%s %s", account.getFirstName(), account.getLastName()))
-                .collect(Collectors.joining(", "));
-        record.setAuthors(authors);
-
+        Record record = setUpRecord(recordRequest, new Record(), authentication);
         return recordRepository.save(record);
     }
 
@@ -92,6 +81,28 @@ public class RecordServiceImpl implements RecordService {
     @Transactional
     public void incrementDownloads(Long recordId) {
         recordRepository.incrementDownloads(recordId);
+    }
+
+    @Override
+    public Record editRecord(Authentication authentication, Long recordId, RecordRequest recordRequest) {
+        Record record = recordRepository.findByIdAndAuthorAccountsContaining(recordId, accountService.getAccountRef(authentication))
+                .orElseThrow(() -> new EntityNotFoundException(Record.class, recordId));
+        setUpRecord(recordRequest, record, authentication);
+        return recordRepository.save(record);
+    }
+
+    private Record setUpRecord(RecordRequest recordRequest, Record record, Authentication authentication) {
+        BeanUtils.copyProperties(recordRequest, record);
+
+        Long accountId = ((UserPrincipal) authentication.getPrincipal()).getAccountId();
+        recordRequest.getAuthorIds().add(accountId);
+        List<Account> authorAccounts = accountService.getMultipleAccounts(recordRequest.getAuthorIds());
+        record.setAuthorAccounts(new HashSet<>(authorAccounts));
+        String authors = authorAccounts.stream()
+                .map(account -> String.format("%s %s", account.getFirstName(), account.getLastName()))
+                .collect(Collectors.joining(", "));
+        record.setAuthors(authors);
+        return record;
     }
 
     @Override

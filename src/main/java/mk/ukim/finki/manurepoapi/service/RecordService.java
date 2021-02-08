@@ -28,4 +28,6 @@ public interface RecordService {
 
     void incrementDownloads(Long recordId);
 
+    Record editRecord(Authentication authentication, Long recordId, RecordRequest recordRequest);
+
 }
