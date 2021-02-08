@@ -14,6 +14,6 @@ public interface FileService {
 
     File getFile(Long fileId);
 
-    void removeFile(Long fileId);
+    void removeFile(Authentication authentication, Long fileId);
 
 }

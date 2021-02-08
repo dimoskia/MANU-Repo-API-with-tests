@@ -43,8 +43,8 @@ public class FileController {
     }
 
     @DeleteMapping("/{fileId}")
-    public ResponseEntity<?> deleteFileFromRecord(@PathVariable Long fileId) {
-        fileService.removeFile(fileId);
+    public ResponseEntity<?> deleteFileFromRecord(Authentication authentication, @PathVariable Long fileId) {
+        fileService.removeFile(authentication, fileId);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 

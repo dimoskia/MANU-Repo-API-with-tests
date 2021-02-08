@@ -58,12 +58,12 @@ public class FileServiceImpl implements FileService {
     }
 
     @Override
-    public void removeFile(Long fileId) {
-        try {
-            fileRepository.deleteById(fileId);
-        } catch (EmptyResultDataAccessException ex) {
-            throw new EntityNotFoundException(File.class, fileId);
+    public void removeFile(Authentication authentication, Long fileId) {
+        File file = getFile(fileId);
+        if (!recordService.checkRecordPermissions(file.getRecord().getId(), authentication)) {
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN);
         }
+        fileRepository.delete(file);
     }
 
 }
