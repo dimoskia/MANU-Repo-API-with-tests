@@ -4,8 +4,7 @@ import mk.ukim.finki.manurepoapi.dto.request.MembersFilter;
 import mk.ukim.finki.manurepoapi.model.Account;
 import org.springframework.data.jpa.domain.Specification;
 
-import static mk.ukim.finki.manurepoapi.repository.specification.SpecificationUtils.propertyEquals;
-import static mk.ukim.finki.manurepoapi.repository.specification.SpecificationUtils.propertyStartsWith;
+import static mk.ukim.finki.manurepoapi.repository.specification.SpecificationUtils.*;
 
 public class MemberSpecification {
 
@@ -22,7 +21,7 @@ public class MemberSpecification {
             return null;
         }
         return SpecificationUtils.<Account>propertyContains("firstName", searchTerm)
-                .or(SpecificationUtils.propertyContains("lastName", searchTerm));
+                .or(propertyContains("lastName", searchTerm));
     }
 
 }
