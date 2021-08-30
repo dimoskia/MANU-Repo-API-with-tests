@@ -20,7 +20,10 @@ public class UserPrincipal implements UserDetails {
     }
 
     public UserPrincipal(Long accountId, Role role) {
-        this.account = new Account(accountId, role);
+        this.account = Account.builder()
+                .id(accountId)
+                .role(role)
+                .build();
     }
 
     @Override

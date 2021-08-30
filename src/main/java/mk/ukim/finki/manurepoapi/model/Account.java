@@ -1,6 +1,9 @@
 package mk.ukim.finki.manurepoapi.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.*;
 
@@ -12,6 +15,9 @@ import java.util.Set;
 @Getter
 @Setter
 @Table(indexes = {@Index(columnList = "email", unique = true)})
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Account {
 
     @Id
@@ -22,10 +28,12 @@ public class Account {
 
     private String password;
 
+    @Builder.Default
     @Enumerated(EnumType.STRING)
-    private Role role;
+    private Role role = Role.ROLE_USER;
 
-    private Boolean enabled;
+    @Builder.Default
+    private Boolean enabled = false;
 
     private String firstName;
 
@@ -49,21 +57,11 @@ public class Account {
 
     private String workplace;
 
+    @Builder.Default
     @ManyToMany(mappedBy = "authorAccounts")
-    private Set<Record> records;
+    private Set<Record> records = new HashSet<>();
 
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private ProfileImage profileImage;
-
-    public Account() {
-        this.records = new HashSet<>();
-        this.role = Role.ROLE_USER;
-        this.enabled = false;
-    }
-
-    public Account(Long id, Role role) {
-        this.id = id;
-        this.role = role;
-    }
 
 }
