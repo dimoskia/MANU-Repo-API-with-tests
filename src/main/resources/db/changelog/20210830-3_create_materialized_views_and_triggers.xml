@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="20210830-1_create_materialized_views" author="Aleksandar Dimoski">
+        <comment>
+            The following materialized views will be created for query optimization:
+            recent_record, popular_record, records_per_collection, records_per_department
+        </comment>
+        <sqlFile path="classpath:sql/views.sql"/>
+    </changeSet>
+
+    <changeSet id="20210830-2_create_triggers_for_reflecting_account_name_edit" author="Aleksandar Dimoski">
+        <comment>Trigger to update authors in record table if someone edits their personal information</comment>
+        <sqlFile path="classpath:sql/triggers.sql" splitStatements="false"/>
+    </changeSet>
+
+</databaseChangeLog>
