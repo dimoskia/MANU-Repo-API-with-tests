@@ -4,10 +4,11 @@ import lombok.Data;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import org.hibernate.annotations.Immutable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
 @Immutable
@@ -20,9 +21,10 @@ public class RecentRecord {
     private String title;
 
     @Enumerated
+    @Column(columnDefinition = "int2")
     private Collection collection;
 
-    private LocalDate dateArchived;
+    private LocalDateTime dateArchived;
 
     private String authors;
 

@@ -24,6 +24,7 @@ public class Account {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true)
     private String email;
 
     private String password;
@@ -40,15 +41,19 @@ public class Account {
     private String lastName;
 
     @Enumerated
+    @Column(columnDefinition = "int2")
     private AcademicDegree academicDegree;
 
     @Enumerated
+    @Column(columnDefinition = "int2")
     private AcademicRank academicRank;
 
     @Enumerated
+    @Column(columnDefinition = "int2")
     private MemberType memberType;
 
     @Enumerated
+    @Column(columnDefinition = "int2")
     private Department department;
 
     private String shortBio;

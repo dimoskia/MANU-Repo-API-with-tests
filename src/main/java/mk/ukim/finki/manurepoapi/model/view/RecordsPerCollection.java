@@ -4,6 +4,7 @@ import lombok.Data;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import org.hibernate.annotations.Immutable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ public class RecordsPerCollection {
 
     @Id
     @Enumerated
+    @Column(columnDefinition = "int2")
     private Collection collection;
 
     private Long recordCount;

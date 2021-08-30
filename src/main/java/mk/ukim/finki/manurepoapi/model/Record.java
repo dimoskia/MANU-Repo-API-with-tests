@@ -30,9 +30,11 @@ public class Record {
     private String authors;
 
     @Enumerated
+    @Column(columnDefinition = "int2")
     private Collection collection;
 
     @Enumerated
+    @Column(columnDefinition = "int2")
     private Department department;
 
     private String subject;
@@ -48,6 +50,7 @@ public class Record {
     private LocalDate publicationDate;
 
     @Enumerated
+    @Column(columnDefinition = "int2")
     private PublicationStatus publicationStatus;
 
     private Integer downloadsCount;
