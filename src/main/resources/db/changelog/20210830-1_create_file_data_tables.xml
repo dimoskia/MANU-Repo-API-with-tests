@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="20210830-1_create_file_data_table" author="Aleksandar Dimoski">
+        <createTable tableName="file_data">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="data" type="bytea">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20210830-2_create_file_table" author="Aleksandar Dimoski">
+        <createTable tableName="file">
+            <column name="id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="content_type" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="file_name" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="size" type="integer">
+                <constraints nullable="false"/>
+            </column>
+            <column name="record_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="fild_id_fk"
+                                 baseTableName="file" baseColumnNames="id"
+                                 referencedTableName="file_data" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="fild_record_id_fk"
+                                 baseTableName="file" baseColumnNames="record_id"
+                                 referencedTableName="record" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

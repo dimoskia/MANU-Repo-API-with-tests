@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="20210830-1_create_profile_image_table" author="Aleksandar Dimoski">
+        <createTable tableName="profile_image">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="content_type" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="data" type="bytea">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20210830-2_create_account_table" author="Aleksandar Dimoski">
+        <createTable tableName="account">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="email" type="varchar(254)">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="password" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="role" type="varchar" defaultValue="ROLE_USER">
+                <constraints nullable="false"/>
+            </column>
+            <column name="enabled" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="first_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="last_name" type="varchar(32)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="academic_degree" type="smallint"/>
+            <column name="academic_rank" type="smallint"/>
+            <column name="member_type" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="department" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="short_bio" type="varchar"/>
+            <column name="phone_number" type="varchar"/>
+            <column name="workplace" type="varchar"/>
+            <column name="profile_image_id" type="bigint"/>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="profile_image_id_fk"
+                                 baseTableName="account" baseColumnNames="profile_image_id"
+                                 referencedTableName="profile_image" referencedColumnNames="id"
+                                 onDelete="SET NULL"/>
+    </changeSet>
+
+    <changeSet id="20210830-3_add_check_constraints_role_valid" author="Aleksandar Dimoski">
+        <sql>
+            ALTER TABLE account
+            ADD CONSTRAINT role_valid
+            CHECK (role IN ('ROLE_ADMIN', 'ROLE_USER'));
+        </sql>
+    </changeSet>
+
+    <changeSet id="20210830-4_add_check_constraints_academic_degree_valid" author="Aleksandar Dimoski">
+        <sql>
+            ALTER TABLE account
+            ADD CONSTRAINT academic_degree_valid
+            CHECK (academic_degree BETWEEN 0 AND 15);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20210830-5_add_check_constraints_academic_rank_valid" author="Aleksandar Dimoski">
+        <sql>
+            ALTER TABLE account
+            ADD CONSTRAINT academic_rank_valid
+            CHECK (academic_rank BETWEEN 0 AND 10);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20210830-6_add_check_constraints_member_type_valid" author="Aleksandar Dimoski">
+        <sql>
+            ALTER TABLE account
+            ADD CONSTRAINT member_type_valid
+            CHECK (member_type BETWEEN 0 AND 3);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20210830-7_add_check_constraints_department_valid" author="Aleksandar Dimoski">
+        <sql>
+            ALTER TABLE account
+            ADD CONSTRAINT department_valid
+            CHECK (department BETWEEN 0 AND 5);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20210830-8_create_record_account_table" author="Aleksandar Dimoski">
+        <createTable tableName="record_account">
+            <column name="record_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="account_id" type="bigint">
+                <constraints primaryKey="true"/>
+            </column>
+        </createTable>
+
+        <addForeignKeyConstraint constraintName="record_id_fk"
+                                 baseTableName="record_account" baseColumnNames="record_id"
+                                 referencedTableName="record" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+
+        <addForeignKeyConstraint constraintName="account_id_fk"
+                                 baseTableName="record_account" baseColumnNames="account_id"
+                                 referencedTableName="account" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+    <changeSet id="20210830-9_create_verification_token_table" author="Aleksandar Dimoski">
+        <createTable tableName="verification_token">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="token" type="varchar">
+                <constraints nullable="false" unique="true"/>
+            </column>
+            <column name="expiration" type="timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="account_id" type="bigint">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+        
+        <addForeignKeyConstraint constraintName="verification_token_fk"
+                                 baseTableName="verification_token" baseColumnNames="account_id"
+                                 referencedTableName="account" referencedColumnNames="id"
+                                 onDelete="CASCADE"/>
+    </changeSet>
+
+</databaseChangeLog>

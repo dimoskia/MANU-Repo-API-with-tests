@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="20210820-1_create_record_table" author="Aleksandar Dimoski">
+        <createTable tableName="record">
+            <column name="id" type="bigint" autoIncrement="true">
+                <constraints primaryKey="true"/>
+            </column>
+            <column name="title" type="varchar(256)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="authors" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="collection" type="smallint" defaultValue="17">
+                <constraints nullable="false"/>
+            </column>
+            <column name="department" type="smallint">
+                <constraints nullable="false"/>
+            </column>
+            <column name="subject" type="varchar(64)">
+                <constraints nullable="false"/>
+            </column>
+            <column name="description_or_abstract" type="varchar">
+                <constraints nullable="false"/>
+            </column>
+            <column name="keywords" type="varchar(128)"/>
+            <column name="language" type="varchar(64)"/>
+            <column name="num_pages" type="integer"/>
+            <column name="publication_date" type="date"/>
+            <column name="publication_status" type="smallint"/>
+            <column name="downloads_count" type="integer" defaultValue="0">
+                <constraints nullable="false"/>
+            </column>
+            <column name="date_archived" type="timestamp" defaultValueComputed="current_timestamp">
+                <constraints nullable="false"/>
+            </column>
+            <column name="approved" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+            <column name="private_record" type="boolean" defaultValue="false">
+                <constraints nullable="false"/>
+            </column>
+        </createTable>
+    </changeSet>
+
+    <changeSet id="20210820-2_add_check_constraints_valid_collection" author="Aleksandar Dimoski">
+        <sql>
+            ALTER TABLE record
+            ADD CONSTRAINT valid_collection
+            CHECK (collection BETWEEN 0 AND 17);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20210820-3_add_check_constraints_valid_department" author="Aleksandar Dimoski">
+        <sql>
+            ALTER TABLE record
+            ADD CONSTRAINT valid_department
+            CHECK (department BETWEEN 0 AND 5);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20210820-4_add_check_constraints_valid_publication_status" author="Aleksandar Dimoski">
+        <sql>
+            ALTER TABLE record
+            ADD CONSTRAINT valid_publication_status
+            CHECK (publication_status BETWEEN 0 AND 2);
+        </sql>
+    </changeSet>
+
+    <changeSet id="20210820-5_add_check_constraints_publication_status_date" author="Aleksandar Dimoski">
+        <sql>
+            ALTER TABLE record
+            ADD CONSTRAINT publication_status_date
+            CHECK ((publication_status IS NOT NULL AND publication_status = 0) OR publication_date IS NULL);
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
