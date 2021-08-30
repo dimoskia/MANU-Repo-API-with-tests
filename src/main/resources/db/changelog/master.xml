@@ -6,4 +6,5 @@
     <include file="classpath:db/changelog/20210830-1_create_file_data_tables.xml"/>
     <include file="classpath:db/changelog/20210830-2_create_account_related_tables.xml"/>
     <include file="classpath:db/changelog/20210830-3_create_materialized_views_and_triggers.xml"/>
+    <include file="classpath:db/changelog/20210830-4_populate_dummy_data.xml"/>
 </databaseChangeLog>

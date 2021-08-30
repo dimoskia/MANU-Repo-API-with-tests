@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+    <changeSet id="20210830-1_populate_mock_data" context="dev" author="Aleksandar Dimoski">
+        <sqlFile path="classpath:sql/mock_record_data.sql"/>
+        <sqlFile path="classpath:sql/mock_account_data.sql"/>
+        <sqlFile path="classpath:sql/mock_author_data.sql"/>
+    </changeSet>
+
+    <changeSet id="20210830-2_refresh_materialized_views" author="Aleksandar Dimoski">
+        <sql>
+            REFRESH MATERIALIZED VIEW CONCURRENTLY recent_record;
+            REFRESH MATERIALIZED VIEW CONCURRENTLY popular_record;
+            REFRESH MATERIALIZED VIEW CONCURRENTLY records_per_collection;
+            REFRESH MATERIALIZED VIEW CONCURRENTLY records_per_department;
+        </sql>
+    </changeSet>
+
+</databaseChangeLog>
