@@ -9,7 +9,7 @@
         <sqlFile path="classpath:sql/mock_author_data.sql"/>
     </changeSet>
 
-    <changeSet id="20210830-2_refresh_materialized_views" author="Aleksandar Dimoski">
+    <changeSet id="20210830-2_refresh_materialized_views" context="dev" author="Aleksandar Dimoski">
         <sql>
             REFRESH MATERIALIZED VIEW CONCURRENTLY recent_record;
             REFRESH MATERIALIZED VIEW CONCURRENTLY popular_record;
