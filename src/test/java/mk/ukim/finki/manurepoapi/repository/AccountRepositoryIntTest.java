@@ -23,10 +23,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-@TestPropertySource(properties = {
-        "spring.liquibase.contexts=test",
-        "spring.datasource.url=jdbc:postgresql://localhost:5432/manu_repo_test"
-})
+@TestPropertySource("classpath:application-test.properties")
 class AccountRepositoryIntTest {
 
     @Autowired
