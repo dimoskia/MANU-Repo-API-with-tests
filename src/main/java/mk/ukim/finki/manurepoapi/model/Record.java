@@ -1,6 +1,9 @@
 package mk.ukim.finki.manurepoapi.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.enums.Department;
@@ -16,6 +19,9 @@ import java.util.Set;
 @Entity
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @NamedEntityGraph(name = "Record.authorAccounts",
         attributeNodes = @NamedAttributeNode("authorAccounts")
 )
@@ -53,29 +59,26 @@ public class Record {
     @Column(columnDefinition = "int2")
     private PublicationStatus publicationStatus;
 
-    private Integer downloadsCount;
+    @Builder.Default
+    private Integer downloadsCount = 0;
 
     @CreationTimestamp
     private LocalDateTime dateArchived;
 
-    private Boolean approved;
+    @Builder.Default
+    private Boolean approved = false;
 
     private Boolean privateRecord;
 
+    @Builder.Default
     @OneToMany(mappedBy = "record", cascade = CascadeType.REMOVE)
-    private Set<File> files;
+    private Set<File> files = new HashSet<>();
 
+    @Builder.Default
     @ManyToMany
     @JoinTable(name = "record_account",
             joinColumns = {@JoinColumn(name = "record_id")},
             inverseJoinColumns = {@JoinColumn(name = "account_id")})
-    private Set<Account> authorAccounts;
-
-    public Record() {
-        this.downloadsCount = 0;
-        this.approved = false;
-        this.files = new HashSet<>();
-        this.authorAccounts = new HashSet<>();
-    }
+    private Set<Account> authorAccounts = new HashSet<>();
 
 }
