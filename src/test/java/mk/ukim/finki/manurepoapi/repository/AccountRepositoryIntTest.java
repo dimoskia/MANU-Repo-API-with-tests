@@ -88,7 +88,6 @@ class AccountRepositoryIntTest {
                 createAccount("Aleksandar", "Milanov", true)
         );
         accounts.forEach(account -> entityManager.persist(account));
-        entityManager.flush();
 
         String searchTerm = "aLeK";
         Pageable pageable = PageRequest.of(0, 10);
