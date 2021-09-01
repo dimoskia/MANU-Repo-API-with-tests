@@ -27,10 +27,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class AccountRepositoryIntTest {
 
     @Autowired
-    AccountRepository accountRepository;
+    private AccountRepository accountRepository;
 
     @Autowired
-    TestEntityManager entityManager;
+    private TestEntityManager entityManager;
 
     @Nested
     class FindByIdAndEnabledTrue {

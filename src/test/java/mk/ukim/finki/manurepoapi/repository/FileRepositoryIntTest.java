@@ -19,10 +19,10 @@ import static org.assertj.core.api.Assertions.assertThat;
 class FileRepositoryIntTest {
 
     @Autowired
-    FileRepository fileRepository;
+    private FileRepository fileRepository;
 
     @Autowired
-    TestEntityManager entityManager;
+    private TestEntityManager entityManager;
 
     @Test
     @Sql(statements = "INSERT INTO record (id, title, collection, department, subject, description_or_abstract, keywords, language, num_pages, " +

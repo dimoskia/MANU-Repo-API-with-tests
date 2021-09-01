@@ -24,10 +24,10 @@ import static org.junit.jupiter.api.Assertions.*;
 class VerificationTokenRepositoryIntTest {
 
     @Autowired
-    VerificationTokenRepository verificationTokenRepository;
+    private VerificationTokenRepository verificationTokenRepository;
 
     @Autowired
-    TestEntityManager entityManager;
+    private TestEntityManager entityManager;
 
     @Test
     void deleteTokensExpirationBefore_givenTableOfTokens_deletesOnlyExpiredOnes() {
