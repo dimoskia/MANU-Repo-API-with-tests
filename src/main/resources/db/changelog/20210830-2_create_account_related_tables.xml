@@ -133,7 +133,7 @@
                 <constraints nullable="false"/>
             </column>
             <column name="account_id" type="bigint">
-                <constraints nullable="false"/>
+                <constraints nullable="false" unique="true"/>
             </column>
         </createTable>
         
