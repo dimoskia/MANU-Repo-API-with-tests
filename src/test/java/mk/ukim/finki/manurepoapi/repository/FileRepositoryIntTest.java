@@ -1,8 +1,8 @@
 package mk.ukim.finki.manurepoapi.repository;
 
 import mk.ukim.finki.manurepoapi.model.File;
-import mk.ukim.finki.manurepoapi.model.FileData;
 import mk.ukim.finki.manurepoapi.model.Record;
+import mk.ukim.finki.manurepoapi.utils.TestUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -32,13 +32,7 @@ class FileRepositoryIntTest {
     void fetchFileWithData_persistNewFile_shouldCascadePersistFileDataAndProperlyPopulateForeignKeys() {
         // given
         Record record = entityManager.find(Record.class, 1L);
-        File file = File.builder()
-                .fileName("fileName")
-                .size(123L)
-                .contentType("text/plain")
-                .record(record)
-                .fileData(new FileData("someFileData".getBytes()))
-                .build();
+        File file = TestUtils.createFile(record);
 
         // when
         Long fileId = fileRepository.save(file).getId();

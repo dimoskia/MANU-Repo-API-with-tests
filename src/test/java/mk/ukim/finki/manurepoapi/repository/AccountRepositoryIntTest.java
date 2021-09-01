@@ -1,10 +1,9 @@
 package mk.ukim.finki.manurepoapi.repository;
 
-import mk.ukim.finki.manurepoapi.enums.Department;
-import mk.ukim.finki.manurepoapi.enums.MemberType;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.VerificationToken;
 import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
+import mk.ukim.finki.manurepoapi.utils.TestUtils;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -38,7 +37,7 @@ class AccountRepositoryIntTest {
         @Test
         void findByIdAndEnabledTrue_accountIsDisabled_returnsEmptyOptional() {
             // given
-            Account disabledAccount = createAccount(false);
+            Account disabledAccount = TestUtils.createAccount(false);
             Long accountId = entityManager.persistAndGetId(disabledAccount, Long.class);
 
             // when
@@ -51,7 +50,7 @@ class AccountRepositoryIntTest {
         @Test
         void findByIdAndEnabledTrue_accountIsEnabled_returnsAccount() {
             // given
-            Account enabledAccount = createAccount(true);
+            Account enabledAccount = TestUtils.createAccount(true);
             Long accountId = entityManager.persistAndGetId(enabledAccount, Long.class);
 
             // when
@@ -78,11 +77,11 @@ class AccountRepositoryIntTest {
     void searchByName_searchTermMatchesName_returnsMemberProjections() {
         // given
         List<Account> accounts = List.of(
-                createAccount("Aleksandar", "Dimoski", true),
-                createAccount("Stefan", "Aleksovski", true),
-                createAccount("Dragana", "Aleksov", false),
-                createAccount("Kostadin", "Ljatkoski", true),
-                createAccount("Aleksandar", "Milanov", true)
+                TestUtils.createAccount("Aleksandar", "Dimoski", true),
+                TestUtils.createAccount("Stefan", "Aleksovski", true),
+                TestUtils.createAccount("Dragana", "Aleksov", false),
+                TestUtils.createAccount("Kostadin", "Ljatkoski", true),
+                TestUtils.createAccount("Aleksandar", "Milanov", true)
         );
         accounts.forEach(account -> entityManager.persist(account));
 
@@ -102,7 +101,7 @@ class AccountRepositoryIntTest {
     @Test
     void enableAccount_givenAccountId_shouldSetEnabledFlagToTrue() {
         // given
-        Account disabledAccount = createAccount(false);
+        Account disabledAccount = TestUtils.createAccount(false);
         Long accountId = entityManager.persistAndGetId(disabledAccount, Long.class);
 
         // when
@@ -124,13 +123,13 @@ class AccountRepositoryIntTest {
     @Test
     void deleteExpiredAccounts_givenAccountsAndTokens_shouldDeleteAccountsWithoutTokens() {
         // given
-        entityManager.persist(createAccount("name1", "surname1", false));
+        entityManager.persist(TestUtils.createAccount("name1", "surname1", false));
 
-        Account disabledAccount = createAccount("name2", "surname2", false);
+        Account disabledAccount = TestUtils.createAccount("name2", "surname2", false);
         Long disabledAccountId = entityManager.persistAndGetId(disabledAccount, Long.class);
         entityManager.persist(new VerificationToken(disabledAccount, 24));
 
-        Account enabledAccount = createAccount("name3", "surname2", true);
+        Account enabledAccount = TestUtils.createAccount("name3", "surname2", true);
         Long enabledAccountId = entityManager.persistAndGetId(enabledAccount, Long.class);
         entityManager.persist(new VerificationToken(enabledAccount, 24));
 
@@ -143,21 +142,5 @@ class AccountRepositoryIntTest {
                 .extracting(Account::getId)
                 .containsExactlyInAnyOrder(disabledAccountId, enabledAccountId);
     }
-
-    private Account createAccount(String firstName, String lastName, boolean enabled) {
-        return Account.builder()
-                .email(String.format("%s.%s@email.com", firstName, lastName))
-                .password("password")
-                .firstName(firstName)
-                .lastName(lastName)
-                .enabled(enabled)
-                .memberType(MemberType.CORRESPONDING)
-                .department(Department.MBS)
-                .build();
-    }
-
-    private Account createAccount(boolean enabled) {
-        return createAccount("firstName", "lastName", enabled);
-    }
-
+    
 }
