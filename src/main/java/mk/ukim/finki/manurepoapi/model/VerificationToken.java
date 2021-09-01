@@ -26,9 +26,10 @@ public class VerificationToken {
     @OneToOne(fetch = FetchType.LAZY)
     private Account account;
 
-    public VerificationToken(Account account) {
+    public VerificationToken(Account account, int durationInHours) {
         this.token = UUID.randomUUID().toString();
         this.account = account;
+        this.expiration = LocalDateTime.now().plusHours(durationInHours);
     }
 
 }
