@@ -5,7 +5,6 @@ import mk.ukim.finki.manurepoapi.model.VerificationToken;
 import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
 import mk.ukim.finki.manurepoapi.utils.TestUtils;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -16,7 +15,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -30,40 +28,6 @@ class AccountRepositoryIntTest {
 
     @Autowired
     private TestEntityManager entityManager;
-
-    @Nested
-    class FindByIdAndEnabledTrue {
-
-        @Test
-        void findByIdAndEnabledTrue_accountIsDisabled_returnsEmptyOptional() {
-            // given
-            Account disabledAccount = TestUtils.createAccount(false);
-            Long accountId = entityManager.persistAndGetId(disabledAccount, Long.class);
-
-            // when
-            Optional<Account> accountOptional = accountRepository.findByIdAndEnabledTrue(accountId);
-
-            // then
-            assertThat(accountOptional).isEmpty();
-        }
-
-        @Test
-        void findByIdAndEnabledTrue_accountIsEnabled_returnsAccount() {
-            // given
-            Account enabledAccount = TestUtils.createAccount(true);
-            Long accountId = entityManager.persistAndGetId(enabledAccount, Long.class);
-
-            // when
-            Optional<Account> accountOptional = accountRepository.findByIdAndEnabledTrue(accountId);
-
-            // then
-            assertThat(accountOptional)
-                    .isPresent()
-                    .map(Account::getId)
-                    .hasValue(accountId);
-        }
-
-    }
 
     /*
         Logic coverage with CACC

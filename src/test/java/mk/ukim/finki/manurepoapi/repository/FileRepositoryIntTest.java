@@ -36,9 +36,9 @@ class FileRepositoryIntTest {
 
         // when
         Long fileId = fileRepository.save(file).getId();
+        File retrievedFile = fileRepository.fetchFileWithData(fileId).orElse(null);
 
         // then
-        File retrievedFile = fileRepository.fetchFileWithData(fileId).orElse(null);
         assertThat(retrievedFile)
                 .isNotNull()
                 .extracting(File::getRecord, File::getFileData)
