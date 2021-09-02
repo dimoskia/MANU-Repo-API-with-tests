@@ -9,7 +9,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.TestPropertySource;
-import org.springframework.test.context.jdbc.Sql;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -25,13 +24,9 @@ class FileRepositoryIntTest {
     private TestEntityManager entityManager;
 
     @Test
-    @Sql(statements = "INSERT INTO record (id, title, collection, department, subject, description_or_abstract, keywords, language, num_pages, " +
-            "publication_date, publication_status, downloads_count, date_archived, approved, private_record, authors) VALUES (1, 'Fundamental " +
-            "foreground forecast', 13, 0, 'Other', 'Nulla justo. Aliquam quis turpis eget elit sodales scelerisque.', 'function', NULL, 191, " +
-            "'2013-11-21', 0, 582, '2019-03-16 10:16:30', false, false, 'authors placeholder')")
     void fetchFileWithData_persistNewFile_shouldCascadePersistFileDataAndProperlyPopulateForeignKeys() {
         // given
-        Record record = entityManager.find(Record.class, 1L);
+        Record record = entityManager.persist(TestUtils.createRecord());
         File file = TestUtils.createFile(record);
 
         // when

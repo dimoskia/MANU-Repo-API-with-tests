@@ -46,7 +46,7 @@ class AccountRepositoryIntTest {
     */
     @Test
     @DisplayName("Should return accounts where the first or last name starts with the search term disregarding casing")
-    void searchByName_searchTermMatchesName_returnsMemberProjections() {
+    void searchByName_givenSearchTerm_returnsMemberProjectionsThatMatchByFirstOrLastName() {
         // given
         List<Account> accounts = List.of(
                 TestUtils.createAccount("Aleksandar", "Dimoski", true),
@@ -151,8 +151,9 @@ class AccountRepositoryIntTest {
             // then
             assertThat(accountsPage.getContent())
                     .hasSize(6)
-                    .extracting(Account::getFirstName)
-                    .containsExactlyInAnyOrder("aBcxxx", "xxxaBcyyy", "xxxaBc", "firstName1", "firstName2", "firstName3");
+                    .map(account -> String.format("%s %s", account.getFirstName(), account.getLastName()))
+                    .containsExactlyInAnyOrder("aBcxxx lastName1", "xxxaBcyyy lastName2", "xxxaBc lastName3",
+                            "firstName1 aBcxxx", "firstName2 xxxaBcyyy", "firstName3 xxxaBc");
         }
 
         @Test
@@ -168,10 +169,8 @@ class AccountRepositoryIntTest {
             Page<Account> accountsPage = accountRepository.findAll(specification, pageable);
 
             // then
-            assertThat(accountsPage.getContent())
-                    .hasSize(1)
-                    .extracting(Account::getLastName)
-                    .containsExactly("aLastName");
+            assertThat(accountsPage.getContent()).hasSize(1);
+            assertThat(accountsPage.getContent().get(0).getLastName()).isEqualTo("aLastName");
         }
 
         @Test
