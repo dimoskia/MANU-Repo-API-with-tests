@@ -63,12 +63,6 @@ public class TestUtils {
                 .build();
     }
 
-    public Record createRecord(Set<Account> authorAccounts) {
-        Record record = createRecord();
-        record.setAuthorAccounts(authorAccounts);
-        return record;
-    }
-
     public Record createRecord() {
         return Record.builder()
                 .title("Organic client-driven secured line")
@@ -87,6 +81,49 @@ public class TestUtils {
                 .privateRecord(false)
                 .authors("authorsPlaceholder")
                 .build();
+    }
+
+    public Record createRecord(Set<Account> authorAccounts) {
+        Record record = createRecord();
+        record.setAuthorAccounts(authorAccounts);
+        return record;
+    }
+
+    public static Record createRecord(String title, String keywords) {
+        Record record = createRecord();
+        record.setTitle(title);
+        record.setKeywords(keywords);
+        return record;
+    }
+
+    public static Record createRecord(Collection collection) {
+        Record record = createRecord();
+        record.setCollection(collection);
+        return record;
+    }
+
+    public static Record createRecord(Department department) {
+        Record record = createRecord();
+        record.setDepartment(department);
+        return record;
+    }
+
+    public static Record createRecord(String subject) {
+        Record record = createRecord();
+        record.setSubject(subject);
+        return record;
+    }
+
+    public static Record createPrivateRecord() {
+        Record record = createRecord();
+        record.setPrivateRecord(true);
+        return record;
+    }
+
+    public static Record createNotApprovedRecord() {
+        Record record = createRecord();
+        record.setApproved(false);
+        return record;
     }
 
 }
