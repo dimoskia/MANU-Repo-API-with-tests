@@ -33,7 +33,9 @@ class AccountRepositoryIntTest {
         Logic coverage with CACC
         Predicate: (a or b) and c
         Elaboration for clauses:
-        a - first name match    b - last name match     c - account enabled
+            a - first name match
+            b - last name match
+            c - account enabled
         Test cases: TFT, FTT, FTF, FFT
     */
     @Test
@@ -79,9 +81,10 @@ class AccountRepositoryIntTest {
 
     /*
         Logic coverage with CACC
-        Predicate: (a and b)
+        Predicate: a and b
         Elaboration for clauses:
-        a - account is disabled    b - verification token not present
+            a - account is disabled
+            b - verification token not present
         Test cases: TT, TF, FT
     */
     @Test
