@@ -39,6 +39,12 @@ public class TestUtils {
         return createAccount(firstName, lastName, true);
     }
 
+    public Account createAccount(String firstName, Department department) {
+        Account enabledAccount = createAccount(firstName, firstName, true);
+        enabledAccount.setDepartment(department);
+        return enabledAccount;
+    }
+
     public VerificationToken createVerificationToken(Account account, LocalDateTime expiration) {
         return VerificationToken.builder()
                 .token(UUID.randomUUID().toString())
