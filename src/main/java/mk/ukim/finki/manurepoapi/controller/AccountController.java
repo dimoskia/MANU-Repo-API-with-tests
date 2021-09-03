@@ -50,11 +50,11 @@ public class AccountController {
         try {
             accountService.confirmRegistration(verificationToken);
         } catch (InvalidTokenException exception) {
-            // TODO: 25-Jan-21 error page for token expired or doesn't exist
-            response.sendRedirect("http://localhost:4200");
+            // TODO: 25-Jan-21 FE work - error page for token expired or doesn't exist
+            response.sendRedirect("http://localhost:4200/registration/failed");
         }
-        // TODO: 25-Jan-21 success page for account activation
-        response.sendRedirect("http://localhost:4200");
+        // TODO: 25-Jan-21 FE work - success page for account activation
+        response.sendRedirect("http://localhost:4200/registration/success");
     }
 
     @PutMapping("/profileImage")
