@@ -2,9 +2,8 @@ package mk.ukim.finki.manurepoapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.*;
 
 import javax.persistence.*;
@@ -12,10 +11,9 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
 @Table(indexes = {@Index(columnList = "email", unique = true)})
 @Builder
+@Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class Account {

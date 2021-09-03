@@ -1,5 +1,8 @@
 package mk.ukim.finki.manurepoapi.model;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -12,9 +15,10 @@ import javax.persistence.Id;
 import java.io.IOException;
 
 @Entity
+@Data
+@Builder
 @NoArgsConstructor
-@Getter
-@Setter
+@AllArgsConstructor
 public class ProfileImage {
 
     @Id
