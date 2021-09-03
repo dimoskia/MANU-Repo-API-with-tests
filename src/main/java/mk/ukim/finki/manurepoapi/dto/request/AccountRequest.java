@@ -1,6 +1,9 @@
 package mk.ukim.finki.manurepoapi.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.Department;
 import mk.ukim.finki.manurepoapi.enums.MemberType;
@@ -16,6 +19,9 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @PasswordMatches
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class AccountRequest implements PasswordCredentials {
 
     @NotEmpty(message = "The email must not be empty")
