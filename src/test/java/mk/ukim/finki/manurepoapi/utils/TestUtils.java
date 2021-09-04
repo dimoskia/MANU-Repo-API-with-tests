@@ -10,6 +10,7 @@ import mk.ukim.finki.manurepoapi.model.File;
 import mk.ukim.finki.manurepoapi.model.FileData;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.model.VerificationToken;
+import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -126,4 +127,18 @@ public class TestUtils {
         return record;
     }
 
+    public static MemberProjection createMember(Long id, String fullName) {
+        return new MemberProjection() {
+            @Override
+            public Long getId() {
+                return id;
+            }
+
+            @Override
+            public String getFullName() {
+                return fullName;
+            }
+
+        };
+    }
 }
