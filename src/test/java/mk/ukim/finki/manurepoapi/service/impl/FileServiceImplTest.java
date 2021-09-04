@@ -44,13 +44,26 @@ class FileServiceImplTest {
     @Mock
     Authentication authentication;
 
+    private final Long recordId = 10L;
+    private final Long fileId = 1L;
+
+    private Record record;
+    private File file;
+
+    @BeforeEach
+    void setUp() {
+        record = Record.builder().id(recordId).build();
+        file = File.builder()
+                .id(fileId)
+                .record(record)
+                .build();
+    }
+
     @Nested
     class SaveFileToRecord {
 
-        private final Long recordId = 1L;
-
         @Test
-        void saveFileToRecord_userDoesNotHavePermissions_exceptionIsThrownForbiddenStatus() throws IOException {
+        void saveFileToRecord_userDoesNotHavePermissions_exceptionIsThrownForbiddenStatus() {
             // given
             when(recordService.checkRecordPermissions(recordId, authentication)).thenReturn(false);
 
@@ -70,7 +83,6 @@ class FileServiceImplTest {
             // given
             byte[] fileData = "file".getBytes();
             MockMultipartFile multipartFile = new MockMultipartFile("name", "originalFileName", multipartContentType, fileData);
-            Record record = Record.builder().id(recordId).build();
 
             when(recordService.checkRecordPermissions(recordId, authentication)).thenReturn(true);
             when(recordService.getRecordRef(recordId)).thenReturn(record);
@@ -95,19 +107,6 @@ class FileServiceImplTest {
 
     @Nested
     class DownloadPublicFile {
-
-        private final Long fileId = 1L;
-        private final Long recordId = 10L;
-
-        private File file;
-
-        @BeforeEach
-        void setUp() {
-            file = File.builder()
-                    .id(fileId)
-                    .record(Record.builder().id(recordId).build())
-                    .build();
-        }
 
         @Test
         void downloadPublicFile_fileDoesNotExits_exceptionIsThrown() {
@@ -151,12 +150,9 @@ class FileServiceImplTest {
     @Nested
     class GetFile {
 
-        private final Long fileId = 1L;
-
         @Test
         void getFile_fileExists_fileFetchedAndReturned() {
             // given
-            File file = File.builder().id(fileId).build();
             when(fileRepository.findById(fileId)).thenReturn(Optional.of(file));
 
             // when
@@ -181,17 +177,8 @@ class FileServiceImplTest {
     @Nested
     class RemoveFile {
 
-        private final Long fileId = 1L;
-        private final Long recordId = 10L;
-
-        private File file;
-
         @BeforeEach
         void setUp() {
-            file = File.builder()
-                    .id(fileId)
-                    .record(Record.builder().id(recordId).build())
-                    .build();
             when(fileRepository.findById(fileId)).thenReturn(Optional.of(file));
         }
 
