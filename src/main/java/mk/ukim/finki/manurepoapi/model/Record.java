@@ -2,9 +2,8 @@ package mk.ukim.finki.manurepoapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.enums.Department;
 import mk.ukim.finki.manurepoapi.enums.PublicationStatus;
@@ -17,8 +16,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @Entity
-@Getter
-@Setter
+@Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
