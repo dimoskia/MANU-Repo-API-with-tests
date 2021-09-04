@@ -35,7 +35,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public Record approveRecord(Long recordId) {
-        // TODO: 05-Feb-21 send email to record creator after confirmation
         Record record = recordRepository.findById(recordId)
                 .orElseThrow(() -> new EntityNotFoundException(Record.class, recordId));
         record.setApproved(true);
@@ -44,7 +43,6 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public void declineRecord(Long recordId) {
-        // TODO: 05-Feb-21 send email to record creator after confirmation
         try {
             recordRepository.deleteById(recordId);
         } catch (EmptyResultDataAccessException exception) {
