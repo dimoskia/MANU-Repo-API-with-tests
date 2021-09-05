@@ -3,7 +3,6 @@ package mk.ukim.finki.manurepoapi.repository;
 import mk.ukim.finki.manurepoapi.dto.request.MembersFilter;
 import mk.ukim.finki.manurepoapi.enums.Department;
 import mk.ukim.finki.manurepoapi.model.Account;
-import mk.ukim.finki.manurepoapi.model.VerificationToken;
 import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
 import mk.ukim.finki.manurepoapi.repository.specification.MemberSpecification;
 import mk.ukim.finki.manurepoapi.utils.TestUtils;
@@ -100,11 +99,11 @@ class AccountRepositoryIntTest {
 
         Account disabledAccount = TestUtils.createAccount("name2", "surname2", false);
         Long disabledAccountId = entityManager.persistAndGetId(disabledAccount, Long.class);
-        entityManager.persist(new VerificationToken(disabledAccount, 24));
+        entityManager.persist(TestUtils.createVerificationToken(disabledAccount));
 
         Account enabledAccount = TestUtils.createAccount("name3", "surname2", true);
         Long enabledAccountId = entityManager.persistAndGetId(enabledAccount, Long.class);
-        entityManager.persist(new VerificationToken(enabledAccount, 24));
+        entityManager.persist(TestUtils.createVerificationToken(enabledAccount));
 
         // when
         accountRepository.deleteExpiredAccounts();

@@ -141,4 +141,12 @@ public class TestUtils {
 
         };
     }
+
+    public static VerificationToken createVerificationToken(Account account) {
+        return VerificationToken.builder()
+                .token(UUID.randomUUID().toString())
+                .account(account)
+                .expiration(LocalDateTime.now())
+                .build();
+    }
 }
