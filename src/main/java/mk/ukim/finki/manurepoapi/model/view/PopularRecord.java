@@ -1,6 +1,9 @@
 package mk.ukim.finki.manurepoapi.model.view;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import org.hibernate.annotations.Immutable;
 
@@ -12,6 +15,9 @@ import javax.persistence.Id;
 @Entity
 @Immutable
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class PopularRecord {
 
     @Id

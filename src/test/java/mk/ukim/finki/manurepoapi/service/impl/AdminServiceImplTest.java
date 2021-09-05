@@ -30,6 +30,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -121,6 +122,7 @@ class AdminServiceImplTest {
             assertThatThrownBy(() -> adminService.approveRecord(recordId))
                     .isInstanceOf(EntityNotFoundException.class)
                     .hasMessage("Record was not found for {id=1}");
+            verifyNoMoreInteractions(recordRepository);
         }
     }
 

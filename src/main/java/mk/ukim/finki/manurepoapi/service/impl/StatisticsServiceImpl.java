@@ -32,7 +32,13 @@ public class StatisticsServiceImpl implements StatisticsService {
         long totalCount = perCollections.stream()
                 .mapToLong(RecordsPerCollection::getRecordCount)
                 .sum();
-        return new RecordStatistics(totalCount, perCollections, perDepartments, getMostRecentRecords(), getMostPopularRecords());
+        return RecordStatistics.builder()
+                .totalRecords(totalCount)
+                .recordsPerCollection(perCollections)
+                .recordsPerDepartment(perDepartments)
+                .recentRecords(getMostRecentRecords())
+                .popularRecords(getMostPopularRecords())
+                .build();
     }
 
     @Override
