@@ -22,6 +22,7 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 
@@ -103,9 +104,9 @@ class StatisticsServiceImplTest {
 
         // then
         verify(recentRecordsViewRepository).refreshMaterializedView();
-        verifyNoMoreInteractions(popularRecordsViewRepository);
-        verifyNoMoreInteractions(recordsPerCollectionRepository);
-        verifyNoMoreInteractions(recordsPerDepartmentRepository);
+        verifyNoInteractions(popularRecordsViewRepository);
+        verifyNoInteractions(recordsPerCollectionRepository);
+        verifyNoInteractions(recordsPerDepartmentRepository);
     }
 
     @Test
@@ -115,9 +116,9 @@ class StatisticsServiceImplTest {
 
         // then
         verify(popularRecordsViewRepository).refreshMaterializedView();
-        verifyNoMoreInteractions(recentRecordsViewRepository);
-        verifyNoMoreInteractions(recordsPerCollectionRepository);
-        verifyNoMoreInteractions(recordsPerDepartmentRepository);
+        verifyNoInteractions(recentRecordsViewRepository);
+        verifyNoInteractions(recordsPerCollectionRepository);
+        verifyNoInteractions(recordsPerDepartmentRepository);
     }
 
     @Test
