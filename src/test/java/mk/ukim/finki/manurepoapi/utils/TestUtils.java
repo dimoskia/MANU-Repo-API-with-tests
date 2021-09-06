@@ -14,8 +14,12 @@ import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+import java.util.stream.LongStream;
 
 @UtilityClass
 public class TestUtils {
@@ -44,6 +48,17 @@ public class TestUtils {
         Account enabledAccount = createAccount(firstName, firstName, true);
         enabledAccount.setDepartment(department);
         return enabledAccount;
+    }
+
+    public List<Account> createAccounts(int count) {
+        return LongStream.range(0, count)
+                .map(idx -> idx + 1)
+                .mapToObj(id -> Account.builder()
+                        .id(id)
+                        .firstName(String.format("firstName%d", id))
+                        .lastName(String.format("lastName%d", id))
+                        .build())
+                .collect(Collectors.toList());
     }
 
     public VerificationToken createVerificationToken(Account account, LocalDateTime expiration) {

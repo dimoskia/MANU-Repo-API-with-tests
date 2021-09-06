@@ -1,6 +1,9 @@
 package mk.ukim.finki.manurepoapi.dto.request;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.enums.Department;
@@ -16,6 +19,9 @@ import java.util.List;
 
 @Getter
 @Setter
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 @PublicationStatusDate
 public class RecordRequest {
 
@@ -23,8 +29,10 @@ public class RecordRequest {
     @Length(max = 256)
     private String title;
 
+    @Builder.Default
     private List<Long> authorIds = new ArrayList<>();
 
+    @Builder.Default
     private Collection collection = Collection.OTHER;
 
     @NotNull(message = "Department must not be empty")
@@ -49,6 +57,7 @@ public class RecordRequest {
 
     private PublicationStatus publicationStatus;
 
+    @Builder.Default
     private Boolean privateRecord = false;
 
 }
