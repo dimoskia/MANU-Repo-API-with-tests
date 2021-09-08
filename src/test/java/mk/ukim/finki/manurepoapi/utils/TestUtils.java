@@ -1,10 +1,13 @@
 package mk.ukim.finki.manurepoapi.utils;
 
+import com.auth0.jwt.JWT;
+import com.auth0.jwt.algorithms.Algorithm;
 import lombok.experimental.UtilityClass;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.enums.Department;
 import mk.ukim.finki.manurepoapi.enums.MemberType;
 import mk.ukim.finki.manurepoapi.enums.PublicationStatus;
+import mk.ukim.finki.manurepoapi.enums.Role;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.File;
 import mk.ukim.finki.manurepoapi.model.FileData;
@@ -12,9 +15,11 @@ import mk.ukim.finki.manurepoapi.model.ProfileImage;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.model.VerificationToken;
 import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
+import mk.ukim.finki.manurepoapi.security.service.JwtUtils;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
@@ -116,44 +121,44 @@ public class TestUtils {
         return record;
     }
 
-    public static Record createRecord(String title, String keywords) {
+    public Record createRecord(String title, String keywords) {
         Record record = createRecord();
         record.setTitle(title);
         record.setKeywords(keywords);
         return record;
     }
 
-    public static Record createRecord(Collection collection) {
+    public Record createRecord(Collection collection) {
         Record record = createRecord();
         record.setCollection(collection);
         return record;
     }
 
-    public static Record createRecord(Department department) {
+    public Record createRecord(Department department) {
         Record record = createRecord();
         record.setDepartment(department);
         return record;
     }
 
-    public static Record createRecord(String subject) {
+    public Record createRecord(String subject) {
         Record record = createRecord();
         record.setSubject(subject);
         return record;
     }
 
-    public static Record createPrivateRecord() {
+    public Record createPrivateRecord() {
         Record record = createRecord();
         record.setPrivateRecord(true);
         return record;
     }
 
-    public static Record createNotApprovedRecord() {
+    public Record createNotApprovedRecord() {
         Record record = createRecord();
         record.setApproved(false);
         return record;
     }
 
-    public static MemberProjection createMember(Long id, String fullName) {
+    public MemberProjection createMember(Long id, String fullName) {
         return new MemberProjection() {
             @Override
             public Long getId() {
@@ -168,11 +173,25 @@ public class TestUtils {
         };
     }
 
-    public static VerificationToken createVerificationToken(Account account) {
+    public VerificationToken createVerificationToken(Account account) {
         return VerificationToken.builder()
                 .token(UUID.randomUUID().toString())
                 .account(account)
                 .expiration(LocalDateTime.now())
                 .build();
+    }
+
+    public String createValidJwt(Long accountId, Role role) {
+        long currentTimeMillis = System.currentTimeMillis();
+        return JWT.create()
+                .withSubject(accountId.toString())
+                .withClaim("role", role.toString())
+                .withIssuedAt(new Date(currentTimeMillis))
+                .withExpiresAt(new Date(currentTimeMillis + JwtUtils.EXPIRATION_IN_HOURS * 60 * 60 * 1000))
+                .sign(Algorithm.HMAC512(JwtUtils.SECRET.getBytes()));
+    }
+
+    public String createValidUserJwt(Long accountId) {
+        return createValidJwt(accountId, Role.ROLE_USER);
     }
 }
