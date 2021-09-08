@@ -8,6 +8,7 @@ import mk.ukim.finki.manurepoapi.enums.PublicationStatus;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.File;
 import mk.ukim.finki.manurepoapi.model.FileData;
+import mk.ukim.finki.manurepoapi.model.ProfileImage;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.model.VerificationToken;
 import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
@@ -18,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 import java.util.stream.LongStream;
 
 @UtilityClass
@@ -71,7 +71,8 @@ public class TestUtils {
 
     public File createFile(Record record) {
         return File.builder()
-                .fileName("fileName")
+                .id(11L)
+                .fileName("fileName.txt")
                 .size(123L)
                 .contentType("text/plain")
                 .record(record)
@@ -82,8 +83,8 @@ public class TestUtils {
     public Record createRecord() {
         return Record.builder()
                 .title("Organic client-driven secured line")
-                .collection(Collection.ARTICLE)
-                .department(Department.MBS)
+                .collection(Collection.CONFERENCE_ITEM)
+                .department(Department.SS)
                 .subject("Other")
                 .descriptionOrAbstract("Vestibulum rutrum rutrum neque.")
                 .keywords("spring, testing, mockito")
@@ -97,6 +98,16 @@ public class TestUtils {
                 .privateRecord(false)
                 .authors("authorsPlaceholder")
                 .build();
+    }
+
+    public Record createRecordWithFilesAndAuthors(Long recordId) {
+        Record record = createRecord();
+        record.setId(recordId);
+        Account account = createAccount("Aleksandar", "Dimoski");
+        account.setProfileImage(ProfileImage.builder().id(111L).build());
+        record.setAuthorAccounts(Set.of(account));
+        record.setFiles(Set.of(createFile(record)));
+        return record;
     }
 
     public Record createRecord(Set<Account> authorAccounts) {
