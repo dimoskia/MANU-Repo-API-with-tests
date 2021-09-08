@@ -125,13 +125,4 @@ public class AccountServiceImpl implements AccountService {
         accountRepository.save(account);
     }
 
-    @Override
-    public void deleteAccount(Authentication authentication, String password) {
-        Account account = getAccount(authentication);
-        if (!passwordEncoder.matches(password, account.getPassword())) {
-            throw new ResponseStatusException(HttpStatus.UNAUTHORIZED, "No or invalid authentication details provided");
-        }
-        // TODO: 01-Feb-21 implement account deletion: what to do with records, with authors field in records etc.
-    }
-
 }

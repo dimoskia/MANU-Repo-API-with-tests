@@ -36,6 +36,4 @@ public interface AccountService {
 
     void changePassword(Authentication authentication, ChangePasswordRequest changePasswordRequest);
 
-    void deleteAccount(Authentication authentication, String password);
-
 }

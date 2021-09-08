@@ -98,10 +98,4 @@ public class AccountController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping
-    public ResponseEntity<?> deleteAccount(Authentication authentication, @RequestHeader String password) {
-        accountService.deleteAccount(authentication, password);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
 }
