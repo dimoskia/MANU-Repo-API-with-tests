@@ -38,7 +38,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers("/accounts", "/accounts/confirmRegistration", "/accounts/emailAvailable").permitAll()
                 .antMatchers("/accounts/**").authenticated()
                 .antMatchers(HttpMethod.POST, "/files").authenticated()
-                .antMatchers("/records/manage").authenticated()
+                .antMatchers("/records/manage/**").authenticated()
                 .anyRequest().permitAll();
 
         http.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
