@@ -3,6 +3,7 @@ package mk.ukim.finki.manurepoapi.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.manurepoapi.enums.*;
 
@@ -61,6 +62,7 @@ public class Account {
     private String workplace;
 
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     @ManyToMany(mappedBy = "authorAccounts")
     private Set<Record> records = new HashSet<>();
 

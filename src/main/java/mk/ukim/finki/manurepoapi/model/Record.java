@@ -3,6 +3,7 @@ package mk.ukim.finki.manurepoapi.model;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.enums.Department;
@@ -69,10 +70,12 @@ public class Record {
     private Boolean privateRecord;
 
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     @OneToMany(mappedBy = "record", cascade = CascadeType.REMOVE)
     private Set<File> files = new HashSet<>();
 
     @Builder.Default
+    @EqualsAndHashCode.Exclude
     @ManyToMany
     @JoinTable(name = "record_account",
             joinColumns = {@JoinColumn(name = "record_id")},
