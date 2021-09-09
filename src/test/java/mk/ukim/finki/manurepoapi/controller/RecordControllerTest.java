@@ -7,10 +7,8 @@ import mk.ukim.finki.manurepoapi.enums.Collection;
 import mk.ukim.finki.manurepoapi.enums.Department;
 import mk.ukim.finki.manurepoapi.enums.PublicationStatus;
 import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
-import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.security.MockUserDetailsService;
-import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 import mk.ukim.finki.manurepoapi.service.RecordService;
 import mk.ukim.finki.manurepoapi.service.StatisticsService;
 import mk.ukim.finki.manurepoapi.utils.TestUtils;
@@ -40,9 +38,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 
+import static mk.ukim.finki.manurepoapi.utils.TestUtils.hasId;
 import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
@@ -226,16 +223,6 @@ class RecordControllerTest {
                 .andExpect(jsonPath("$.content[0].department", is("SS")))
                 .andExpect(jsonPath("$.content[0].dateArchived", is("2021-01-01T10:10:00")));
         verify(recordService).getManageRecordsPage(eq(expectedManageRecordsFilter), eq(expectedPageable), argThat(auth -> hasId(auth, accountId)));
-    }
-
-    private Boolean hasId(Authentication authentication, Long accountId) {
-        return Optional.ofNullable(authentication)
-                .map(Authentication::getPrincipal)
-                .filter(principal -> principal instanceof UserPrincipal)
-                .map(principal -> ((UserPrincipal) principal).getAccount())
-                .map(Account::getId)
-                .map(principalAccountId -> Objects.equals(principalAccountId, accountId))
-                .orElse(false);
     }
 
     static List<Arguments> getRecordsPageForAccountPaginationParams() {

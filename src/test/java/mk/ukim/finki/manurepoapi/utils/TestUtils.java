@@ -15,12 +15,16 @@ import mk.ukim.finki.manurepoapi.model.ProfileImage;
 import mk.ukim.finki.manurepoapi.model.Record;
 import mk.ukim.finki.manurepoapi.model.VerificationToken;
 import mk.ukim.finki.manurepoapi.repository.projection.MemberProjection;
+import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 import mk.ukim.finki.manurepoapi.security.service.JwtUtils;
+import org.springframework.security.core.Authentication;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -193,5 +197,15 @@ public class TestUtils {
 
     public String createValidUserJwt(Long accountId) {
         return createValidJwt(accountId, Role.ROLE_USER);
+    }
+
+    public static Boolean hasId(Authentication authentication, Long accountId) {
+        return Optional.ofNullable(authentication)
+                .map(Authentication::getPrincipal)
+                .filter(principal -> principal instanceof UserPrincipal)
+                .map(principal -> ((UserPrincipal) principal).getAccount())
+                .map(Account::getId)
+                .map(principalAccountId -> Objects.equals(principalAccountId, accountId))
+                .orElse(false);
     }
 }
