@@ -14,6 +14,7 @@ import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 import mk.ukim.finki.manurepoapi.service.RecordService;
 import mk.ukim.finki.manurepoapi.service.StatisticsService;
 import mk.ukim.finki.manurepoapi.utils.TestUtils;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -73,6 +74,48 @@ class RecordControllerTest {
     @Autowired
     MockMvc mockMvc;
 
+    private final Long recordId = 1L;
+
+    private final Long accountId = 1L;
+
+    private String validUserJwt;
+
+    private final String validRecordRequestJSONPayload = "{" +
+            "    \"title\": \"Record Title\"," +
+            "    \"authorIds\": [11, 22]," +
+            "    \"collection\": \"BOOK\"," +
+            "    \"department\": \"MS\"," +
+            "    \"subject\": \"Surgery of heart\"," +
+            "    \"descriptionOrAbstract\": \"descriptionOrAbstract\"," +
+            "    \"keywords\": \"k1, k2, k3\"," +
+            "    \"language\": \"English\"," +
+            "    \"numPages\": 123," +
+            "    \"publicationDate\": \"2021-01-01\"," +
+            "    \"publicationStatus\": \"PUBLISHED\"," +
+            "    \"privateRecord\": false" +
+            "}";
+
+    private RecordRequest expectedRecordRequest;
+
+    @BeforeEach
+    void setUp() {
+        validUserJwt = String.format("Bearer %s", TestUtils.createValidUserJwt(accountId));
+        expectedRecordRequest = RecordRequest.builder()
+                .title("Record Title")
+                .authorIds(List.of(11L, 22L))
+                .collection(Collection.BOOK)
+                .department(Department.MS)
+                .subject("Surgery of heart")
+                .descriptionOrAbstract("descriptionOrAbstract")
+                .keywords("k1, k2, k3")
+                .language("English")
+                .numPages(123)
+                .publicationDate(LocalDate.of(2021, 1, 1))
+                .publicationStatus(PublicationStatus.PUBLISHED)
+                .privateRecord(false)
+                .build();
+    }
+
     @ParameterizedTest
     @MethodSource("getRecordsPagePaginationParams")
     void getRecordsPage_filtersSpecifiedAsQueryParams_returnRecordsPage(String page, String size, String sort, Pageable expectedPageable) throws Exception {
@@ -116,8 +159,6 @@ class RecordControllerTest {
     @Nested
     class GetRecordDetails {
 
-        private final Long recordId = 1L;
-
         @Test
         void getRecordDetails_givenRecordId_returnsRecordWithFilesAndAuthorsData() throws Exception {
             // given
@@ -160,7 +201,6 @@ class RecordControllerTest {
     @MethodSource("getRecordsPageForAccountPaginationParams")
     void getRecordsPageForAccount_validJwt_returnsRecordsPage(String page, String size, String sort, Pageable expectedPageable) throws Exception {
         // given
-        Long accountId = 1L;
         ManageRecordsFilter expectedManageRecordsFilter = ManageRecordsFilter.builder()
                 .collection(Collection.AUDIO)
                 .privateRecord(true)
@@ -171,14 +211,13 @@ class RecordControllerTest {
                 .thenReturn(recordsPage);
 
         // when, then
-        MockHttpServletRequestBuilder requestBuilder = get("/records/manage")
+        mockMvc.perform(get("/records/manage")
                 .queryParam("collection", "AUDIO")
                 .queryParam("privateRecord", "true")
                 .queryParam("page", page)
                 .queryParam("size", size)
                 .queryParam("sort", sort)
-                .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TestUtils.createValidUserJwt(accountId)));
-        mockMvc.perform(requestBuilder)
+                .header(HttpHeaders.AUTHORIZATION, validUserJwt))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.content", hasSize(1)))
@@ -235,11 +274,10 @@ class RecordControllerTest {
                     "    \"publicationStatus\": \"SUBMITTED\"," +
                     "    \"privateRecord\": false" +
                     "}";
-            String authorizationHeader = String.format("Bearer %s", TestUtils.createValidUserJwt(1L));
 
             // when, then
             mockMvc.perform(post("/records/manage")
-                    .header(HttpHeaders.AUTHORIZATION, authorizationHeader)
+                    .header(HttpHeaders.AUTHORIZATION, validUserJwt)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(invalidRecordJSONPayload))
                     .andExpect(status().isBadRequest())
@@ -255,46 +293,15 @@ class RecordControllerTest {
         @Test
         void createRecord_validJwtPresentValidPayload_shouldCreateNewRecord() throws Exception {
             // given
-            String validRecordJSONPayload = "{" +
-                    "    \"title\": \"Record Title\"," +
-                    "    \"authorIds\": [11, 22]," +
-                    "    \"collection\": \"BOOK\"," +
-                    "    \"department\": \"MS\"," +
-                    "    \"subject\": \"Surgery of heart\"," +
-                    "    \"descriptionOrAbstract\": \"descriptionOrAbstract\"," +
-                    "    \"keywords\": \"k1, k2, k3\"," +
-                    "    \"language\": \"English\"," +
-                    "    \"numPages\": 123," +
-                    "    \"publicationDate\": \"2021-01-01\"," +
-                    "    \"publicationStatus\": \"PUBLISHED\"," +
-                    "    \"privateRecord\": false" +
-                    "}";
-            RecordRequest expectedRecordRequest = RecordRequest.builder()
-                    .title("Record Title")
-                    .authorIds(List.of(11L, 22L))
-                    .collection(Collection.BOOK)
-                    .department(Department.MS)
-                    .subject("Surgery of heart")
-                    .descriptionOrAbstract("descriptionOrAbstract")
-                    .keywords("k1, k2, k3")
-                    .language("English")
-                    .numPages(123)
-                    .publicationDate(LocalDate.of(2021, 1, 1))
-                    .publicationStatus(PublicationStatus.PUBLISHED)
-                    .privateRecord(false)
-                    .build();
-
-            final Long accountId = 1L;
-            final Long recordId = 10L;
             when(recordService.createRecord(any(), any())).thenReturn(TestUtils.createRecordWithFilesAndAuthors(recordId));
 
             // when, then
             mockMvc.perform(post("/records/manage")
-                    .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TestUtils.createValidUserJwt(accountId)))
+                    .header(HttpHeaders.AUTHORIZATION, validUserJwt)
                     .contentType(MediaType.APPLICATION_JSON)
-                    .content(validRecordJSONPayload))
+                    .content(validRecordRequestJSONPayload))
                     .andExpect(status().isCreated())
-                    .andExpect(header().string("Location", is("http://localhost/records/" + recordId)));
+                    .andExpect(header().string(HttpHeaders.LOCATION, is("http://localhost/records/" + recordId)));
 
             verify(recordService).createRecord(argThat(auth -> hasId(auth, accountId)), eq(expectedRecordRequest));
         }
@@ -303,9 +310,6 @@ class RecordControllerTest {
 
     @Nested
     class DeleteRecord {
-
-        private final Long recordId = 1L;
-        private final Long accountId = 10L;
 
         @Test
         void deleteRecord_noAuthorizationHeader_requestIsForbidden() throws Exception {
@@ -322,7 +326,7 @@ class RecordControllerTest {
 
             // when, then
             mockMvc.perform(delete("/records/manage/{recordId}", recordId)
-                    .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TestUtils.createValidUserJwt(accountId))))
+                    .header(HttpHeaders.AUTHORIZATION,validUserJwt))
                     .andExpect(status().isBadRequest());
         }
 
@@ -330,7 +334,7 @@ class RecordControllerTest {
         void deleteRecord_validJwt_recordDeletedStatusNoContent() throws Exception {
             // when, then
             mockMvc.perform(delete("/records/manage/{recordId}", recordId)
-                    .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TestUtils.createValidUserJwt(accountId))))
+                    .header(HttpHeaders.AUTHORIZATION, validUserJwt))
                     .andExpect(status().isNoContent());
 
             verify(recordService).deleteRecord(argThat(authentication -> hasId(authentication, accountId)), eq(recordId));
@@ -339,8 +343,6 @@ class RecordControllerTest {
 
     @Nested
     class EditRecord {
-        private final Long recordId = 1L;
-        private final Long accountId = 111L;
 
         @Test
         void editRecord_noAuthorizationHeader_requestIsForbidden() throws Exception {
@@ -351,20 +353,6 @@ class RecordControllerTest {
         @Test
         void editRecord_validJwtRecordDoesNotBelongToAccount_returnsNotFound() throws Exception {
             // given
-            String validRecordRequestJSONPayload = "{" +
-                    "    \"title\": \"Record Title\"," +
-                    "    \"authorIds\": [11, 22]," +
-                    "    \"collection\": \"BOOK\"," +
-                    "    \"department\": \"MS\"," +
-                    "    \"subject\": \"Surgery of heart\"," +
-                    "    \"descriptionOrAbstract\": \"descriptionOrAbstract\"," +
-                    "    \"keywords\": \"k1, k2, k3\"," +
-                    "    \"language\": \"English\"," +
-                    "    \"numPages\": 123," +
-                    "    \"publicationDate\": \"2021-01-01\"," +
-                    "    \"publicationStatus\": \"PUBLISHED\"," +
-                    "    \"privateRecord\": false" +
-                    "}";
             when(recordService.editRecord(any(Authentication.class), eq(recordId), any(RecordRequest.class)))
                     .thenThrow(new EntityNotFoundException(Record.class, recordId));
 
@@ -372,41 +360,13 @@ class RecordControllerTest {
             mockMvc.perform(patch("/records/manage/{recordId}", recordId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(validRecordRequestJSONPayload)
-                    .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TestUtils.createValidUserJwt(accountId))))
+                    .header(HttpHeaders.AUTHORIZATION, validUserJwt))
                     .andExpect(status().isNotFound());
         }
 
         @Test
         void editRecord_validJwtRecordValidPayload_recordIsEditedAndStatusOK() throws Exception {
             // given
-            String validRecordRequestJSONPayload = "{" +
-                    "    \"title\": \"Record Title\"," +
-                    "    \"authorIds\": [11, 22]," +
-                    "    \"collection\": \"BOOK\"," +
-                    "    \"department\": \"MS\"," +
-                    "    \"subject\": \"Surgery of heart\"," +
-                    "    \"descriptionOrAbstract\": \"descriptionOrAbstract\"," +
-                    "    \"keywords\": \"k1, k2, k3\"," +
-                    "    \"language\": \"English\"," +
-                    "    \"numPages\": 123," +
-                    "    \"publicationDate\": \"2021-01-01\"," +
-                    "    \"publicationStatus\": \"PUBLISHED\"," +
-                    "    \"privateRecord\": false" +
-                    "}";
-            RecordRequest expectedRecordRequest = RecordRequest.builder()
-                    .title("Record Title")
-                    .authorIds(List.of(11L, 22L))
-                    .collection(Collection.BOOK)
-                    .department(Department.MS)
-                    .subject("Surgery of heart")
-                    .descriptionOrAbstract("descriptionOrAbstract")
-                    .keywords("k1, k2, k3")
-                    .language("English")
-                    .numPages(123)
-                    .publicationDate(LocalDate.of(2021, 1, 1))
-                    .publicationStatus(PublicationStatus.PUBLISHED)
-                    .privateRecord(false)
-                    .build();
             when(recordService.editRecord(any(Authentication.class), eq(recordId), any(RecordRequest.class)))
                     .thenReturn(TestUtils.createRecordWithFilesAndAuthors(recordId));
 
@@ -414,7 +374,7 @@ class RecordControllerTest {
             mockMvc.perform(patch("/records/manage/{recordId}", recordId)
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(validRecordRequestJSONPayload)
-                    .header(HttpHeaders.AUTHORIZATION, String.format("Bearer %s", TestUtils.createValidUserJwt(accountId))))
+                    .header(HttpHeaders.AUTHORIZATION, validUserJwt))
                     .andExpect(status().isOk());
             verify(recordService).editRecord(argThat(auth -> hasId(auth, accountId)), eq(recordId), eq(expectedRecordRequest));
         }
