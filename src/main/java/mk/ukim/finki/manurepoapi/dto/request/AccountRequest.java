@@ -2,9 +2,8 @@ package mk.ukim.finki.manurepoapi.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import mk.ukim.finki.manurepoapi.enums.Department;
 import mk.ukim.finki.manurepoapi.enums.MemberType;
 import mk.ukim.finki.manurepoapi.validator.EmailAvailable;
@@ -16,8 +15,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
-@Getter
-@Setter
+@Data
 @PasswordMatches
 @Builder
 @NoArgsConstructor

@@ -52,12 +52,13 @@ public class AccountController {
         } catch (InvalidTokenException exception) {
             // TODO: 25-Jan-21 FE work - error page for token expired or doesn't exist
             response.sendRedirect("http://localhost:4200/registration/failed");
+            return;
         }
         // TODO: 25-Jan-21 FE work - success page for account activation
         response.sendRedirect("http://localhost:4200/registration/success");
     }
 
-    @PutMapping("/profileImage")
+    @PostMapping("/profileImage")
     public ResponseEntity<Avatar> setProfileImage(Authentication authentication,
                                                   @RequestParam MultipartFile imageFile) throws IOException {
         if (imageFile.getContentType() == null || !imageFile.getContentType().startsWith("image")) {
