@@ -96,6 +96,30 @@ class AccountControllerTest {
         }
 
         @Test
+        void createAccount_invalidJSONPayload_badRequestWithAppropriateErrorMessage() throws Exception {
+            // given
+            final String malformedAccountRequestJSON = "{" +
+                    "  \"email\": \"Aleksandar.Dimoski@email.com\"," +
+                    "  \"password\": \"Password1!\"," +
+                    "  \"confirmPassword\": \"Password1!\"," +
+                    "  \"firstName\": \"Aleksandar\"," +
+                    "  \"lastName\": \"Dimoski\"," +
+                    "  \"memberType\": \"123\"," +
+                    "  \"department\": \"notADepartment\"" +
+                    "}";
+
+            when(accountService.isEmailAvailable(any(String.class))).thenReturn(true);
+
+            // when, then
+            mockMvc.perform(post("/accounts")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .content(malformedAccountRequestJSON))
+                    .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(jsonPath("$.message", is("Malformed JSON request")));
+        }
+
+        @Test
         void createAccount_validAccountRequestPayload_accountIsCreatedAndReturned() throws Exception {
             // given
             final String validAccountRequestJSON = "{" +
