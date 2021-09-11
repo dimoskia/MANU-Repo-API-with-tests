@@ -199,6 +199,10 @@ public class TestUtils {
         return createValidJwt(accountId, Role.ROLE_USER);
     }
 
+    public String createValidAdminJwt(Long accountId) {
+        return createValidJwt(accountId, Role.ROLE_ADMIN);
+    }
+
     public static Boolean hasId(Authentication authentication, Long accountId) {
         return Optional.ofNullable(authentication)
                 .map(Authentication::getPrincipal)
