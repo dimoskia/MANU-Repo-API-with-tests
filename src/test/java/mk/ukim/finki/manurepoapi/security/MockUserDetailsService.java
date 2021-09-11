@@ -1,29 +1,27 @@
 package mk.ukim.finki.manurepoapi.security;
 
-import mk.ukim.finki.manurepoapi.enums.Department;
-import mk.ukim.finki.manurepoapi.enums.MemberType;
 import mk.ukim.finki.manurepoapi.enums.Role;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.security.model.UserPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 public class MockUserDetailsService implements UserDetailsService {
 
-    private final Account account = Account.builder()
-            .email("aleksandar.dimoski@students.finki.ukim.mk")
-            .password("password")
-            .role(Role.ROLE_USER)
-            .enabled(true)
-            .firstName("Aleksandar")
-            .lastName("Dimoski")
-            .memberType(MemberType.CORRESPONDING)
-            .department(Department.MBS)
-            .build();
-
     @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        BCryptPasswordEncoder bCryptPasswordEncoder = new BCryptPasswordEncoder();
+        Account account = Account.builder()
+                .id(1L)
+                .firstName("Aleksandar")
+                .lastName("Dimoski")
+                .email("aleksandar.dimoski@students.finki.ukim.mk")
+                .password(bCryptPasswordEncoder.encode("correctPassword"))
+                .role(Role.ROLE_USER)
+                .enabled(true)
+                .build();
         return new UserPrincipal(account);
     }
 
