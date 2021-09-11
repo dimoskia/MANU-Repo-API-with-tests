@@ -2,6 +2,7 @@ package mk.ukim.finki.manurepoapi.controller;
 
 import mk.ukim.finki.manurepoapi.dto.request.AccountRequest;
 import mk.ukim.finki.manurepoapi.dto.request.ChangePasswordRequest;
+import mk.ukim.finki.manurepoapi.dto.request.EditAccountRequest;
 import mk.ukim.finki.manurepoapi.enums.Department;
 import mk.ukim.finki.manurepoapi.enums.MemberType;
 import mk.ukim.finki.manurepoapi.exception.InvalidTokenException;
@@ -30,9 +31,12 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.web.multipart.MultipartFile;
 
 import static mk.ukim.finki.manurepoapi.utils.TestUtils.hasId;
+import static org.hamcrest.Matchers.contains;
+import static org.hamcrest.Matchers.containsInAnyOrder;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
@@ -55,9 +59,6 @@ class AccountControllerTest {
 
     @MockBean
     AccountService accountService;
-
-    @Autowired
-    AccountController accountController;
 
     @Autowired
     MockMvc mockMvc;
@@ -85,6 +86,7 @@ class AccountControllerTest {
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(invalidAccountRequestJSON))
                     .andExpect(status().isBadRequest())
+                    .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(jsonPath("$.message", is("Validation error")))
                     .andExpect(jsonPath("$.subErrors").isArray())
                     .andExpect(jsonPath("$.subErrors", hasSize(1)))
@@ -174,7 +176,7 @@ class AccountControllerTest {
     void checkEmailAvailable_givenEmailAddress_returnsBoolean(Boolean emailAvailable) throws Exception {
         // given
         final String email = "user@manu.com";
-        when(accountService.isEmailAvailable(any(String.class))).thenReturn(emailAvailable);
+        when(accountService.isEmailAvailable(anyString())).thenReturn(emailAvailable);
 
         // when, then
         mockMvc.perform(get("/accounts/emailAvailable")
@@ -219,6 +221,7 @@ class AccountControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, validUserJwt))
                         .andExpect(status().isBadRequest())
                         .andExpect(status().reason("No image file present in the request"));
+                verifyNoInteractions(accountService);
             }
 
             @Test
@@ -234,6 +237,7 @@ class AccountControllerTest {
                         .header(HttpHeaders.AUTHORIZATION, validUserJwt))
                         .andExpect(status().isBadRequest())
                         .andExpect(status().reason("No image file present in the request"));
+                verifyNoInteractions(accountService);
             }
 
             @Test
@@ -293,6 +297,75 @@ class AccountControllerTest {
         }
 
         @Nested
+        class EditPersonalInfo {
+
+            @Test
+            void editPersonalInfo_invalidJsonPayload_validationIsTriggeredBadRequestReturned() throws Exception {
+                // given
+                final String invalidEditAccountRequestJSON = "{" +
+                        "    \"firstName\": \"\"," +
+                        "    \"lastName\": \"\"," +
+                        "    \"memberType\": null," +
+                        "    \"department\": null," +
+                        "    \"academicDegree\": \"BS\"," +
+                        "    \"academicRank\": \"STUDENT\"" +
+                        "}";
+
+                // when, then
+                mockMvc.perform(patch("/accounts/edit")
+                        .header(HttpHeaders.AUTHORIZATION, validUserJwt)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(invalidEditAccountRequestJSON))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.message", is("Validation error")))
+                        .andExpect(jsonPath("$.subErrors").isArray())
+                        .andExpect(jsonPath("$.subErrors", hasSize(4)))
+                        .andExpect(jsonPath("$.subErrors[*].field", containsInAnyOrder("firstName", "lastName", "memberType", "department")))
+                        .andExpect(jsonPath("$.subErrors[?(@.field=='firstName')].rejectedValue", contains("")))
+                        .andExpect(jsonPath("$.subErrors[?(@.field=='firstName')].message", contains("You must provide first name")));
+
+                verifyNoInteractions(accountService);
+            }
+
+            @Test
+            void editPersonalInfo_validJsonPayload_accountIsEdited() throws Exception {
+                // given
+                final String validEditAccountRequestJSON = "{" +
+                        "    \"email\": \"emailThatShouldNotBeDeserialized\"," +
+                        "    \"firstName\": \"Aleksandar\"," +
+                        "    \"lastName\": \"Dimoski\"," +
+                        "    \"memberType\": \"CORRESPONDING\"," +
+                        "    \"department\": \"MBS\"" +
+                        "}";
+
+                EditAccountRequest expectedEditAccountRequest = EditAccountRequest.builder()
+                        .email(null)
+                        .firstName("Aleksandar")
+                        .lastName("Dimoski")
+                        .memberType(MemberType.CORRESPONDING)
+                        .department(Department.MBS)
+                        .build();
+
+                Account account = TestUtils.createAccount("Aleksandar", "Dimoski");
+                when(accountService.editPersonalInfo(any(Authentication.class), any(EditAccountRequest.class))).thenReturn(account);
+
+                // when, then
+                mockMvc.perform(patch("/accounts/edit")
+                        .header(HttpHeaders.AUTHORIZATION, validUserJwt)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(validEditAccountRequestJSON))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.email", is("Aleksandar.Dimoski@email.com")))
+                        .andExpect(jsonPath("$.firstName", is("Aleksandar")))
+                        .andExpect(jsonPath("$.lastName", is("Dimoski")))
+                        .andExpect(jsonPath("$.memberType", is("CORRESPONDING")))
+                        .andExpect(jsonPath("$.department", is("MBS")));
+
+                verify(accountService).editPersonalInfo(argThat(auth -> hasId(auth, accountId)), eq(expectedEditAccountRequest));
+            }
+        }
+
+        @Nested
         class ChangePassword {
 
             @Test
@@ -341,6 +414,7 @@ class AccountControllerTest {
                         .andExpect(jsonPath("$.subErrors[0].field", is("currentPassword")))
                         .andExpect(jsonPath("$.subErrors[0].rejectedValue", is("")))
                         .andExpect(jsonPath("$.subErrors[0].message", is("You must enter your current password")));
+
                 verifyNoInteractions(accountService);
             }
         }
