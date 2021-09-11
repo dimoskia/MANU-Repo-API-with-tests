@@ -76,7 +76,7 @@ class FileServiceImplTest {
         @ParameterizedTest
         @CsvSource(value = {
                 "text/plain, text/plain",
-                ", application/octet-stream",
+                "'', application/octet-stream",
                 "null, application/octet-stream"
         }, nullValues = "null")
         void saveFileToRecord_userHasPermissions_FileSavedAndRecordRelationEstablished(String multipartContentType, String expectedFileContentType) throws IOException {
