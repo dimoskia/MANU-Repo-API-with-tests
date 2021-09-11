@@ -14,6 +14,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.FileCopyUtils;
@@ -61,7 +62,7 @@ public class AdminController {
         File file = fileService.getFile(fileId);
         response.setContentType(file.getContentType());
         response.setContentLengthLong(file.getSize());
-        response.setHeader("Content-Disposition", "attachment; filename=\"" + file.getFileName() + "\"");
+        response.setHeader(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + file.getFileName() + "\"");
         FileCopyUtils.copy(file.getFileData().getData(), response.getOutputStream());
         response.getOutputStream().flush();
     }
