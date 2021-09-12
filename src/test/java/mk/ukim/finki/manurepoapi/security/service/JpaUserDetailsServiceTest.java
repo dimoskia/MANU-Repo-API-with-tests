@@ -51,7 +51,8 @@ class JpaUserDetailsServiceTest {
         UserDetails userDetails = jpaUserDetailsService.loadUserByUsername(email);
 
         // then
-        assertThat(userDetails).isNotNull()
+        assertThat(userDetails)
+                .isNotNull()
                 .isInstanceOf(UserPrincipal.class)
                 .matches(user -> Objects.equals(account, ((UserPrincipal) user).getAccount()));
     }

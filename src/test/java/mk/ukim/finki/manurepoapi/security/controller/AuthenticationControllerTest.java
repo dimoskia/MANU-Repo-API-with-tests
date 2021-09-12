@@ -2,6 +2,7 @@ package mk.ukim.finki.manurepoapi.security.controller;
 
 import mk.ukim.finki.manurepoapi.security.MockUserDetailsService;
 import org.hamcrest.core.IsNull;
+import org.hamcrest.text.IsBlankString;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -16,6 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
+import static org.hamcrest.Matchers.not;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -71,6 +73,7 @@ class AuthenticationControllerTest {
                 .content(incorrectPasswordAuthRequestJSON)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
+                .andExpect(jsonPath("$.jwt", not(IsBlankString.blankOrNullString())))
                 .andExpect(jsonPath("$.avatar.firstName", is("Aleksandar")))
                 .andExpect(jsonPath("$.avatar.lastName", is("Dimoski")))
                 .andExpect(jsonPath("$.avatar.imageUrl", IsNull.nullValue()));
