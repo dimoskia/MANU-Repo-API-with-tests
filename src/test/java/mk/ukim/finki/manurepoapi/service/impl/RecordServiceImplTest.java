@@ -18,6 +18,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.AdditionalAnswers;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -39,6 +40,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -167,7 +169,7 @@ class RecordServiceImplTest {
                 .publicationStatus(PublicationStatus.PUBLISHED)
                 .privateRecord(false)
                 .build();
-        when(recordRepository.save(expectedRecord)).thenReturn(expectedRecord);
+        when(recordRepository.save(expectedRecord)).then(returnsFirstArg());
 
         RecordRequest recordRequest = buildRecordRequest();
 

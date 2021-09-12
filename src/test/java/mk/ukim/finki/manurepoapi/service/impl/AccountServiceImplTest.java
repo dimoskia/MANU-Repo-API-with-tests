@@ -35,6 +35,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.argThat;
@@ -133,7 +134,7 @@ class AccountServiceImplTest {
             // given
             MockMultipartFile mockImageFile = new MockMultipartFile("name", "", "text/plain", "content".getBytes());
             when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
-            when(accountRepository.save(any(Account.class))).thenReturn(account);
+            when(accountRepository.save(any(Account.class))).then(returnsFirstArg());
             ProfileImage expectedProfileImage = ProfileImage.builder()
                     .id(null)
                     .data("content".getBytes())
@@ -160,7 +161,7 @@ class AccountServiceImplTest {
             account.setProfileImage(oldProfileImage);
 
             when(accountRepository.findById(accountId)).thenReturn(Optional.of(account));
-            when(accountRepository.save(any(Account.class))).thenReturn(account);
+            when(accountRepository.save(any(Account.class))).then(returnsFirstArg());
 
             ProfileImage expectedProfileImage = ProfileImage.builder()
                     .id(1L)
@@ -220,7 +221,7 @@ class AccountServiceImplTest {
                     .workplace("workplace")
                     .build();
 
-            when(accountRepository.save(expectedAccount)).thenReturn(expectedAccount);
+            when(accountRepository.save(expectedAccount)).then(returnsFirstArg());
 
             // when
             Account actualAccount = accountService.editPersonalInfo(authentication, editAccountRequest);
@@ -315,7 +316,7 @@ class AccountServiceImplTest {
                 .build();
 
         when(passwordEncoder.encode(rawPassword)).thenReturn(encodedPassword);
-        when(accountRepository.save(expectedAccount)).thenReturn(expectedAccount);
+        when(accountRepository.save(expectedAccount)).then(returnsFirstArg());
 
         // when
         Account actualAccount = accountService.createAccount(accountRequest);

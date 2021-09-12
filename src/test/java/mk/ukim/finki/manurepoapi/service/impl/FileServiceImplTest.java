@@ -25,6 +25,7 @@ import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.AdditionalAnswers.returnsFirstArg;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
@@ -95,7 +96,7 @@ class FileServiceImplTest {
                     .fileData(new FileData(fileData))
                     .build();
 
-            when(fileRepository.save(expectedFile)).thenReturn(expectedFile);
+            when(fileRepository.save(expectedFile)).then(returnsFirstArg());
 
             // when
             File actualFile = fileService.saveFileToRecord(multipartFile, recordId, authentication);
