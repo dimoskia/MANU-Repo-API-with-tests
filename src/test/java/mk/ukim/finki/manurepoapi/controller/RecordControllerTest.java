@@ -49,6 +49,7 @@ import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -189,12 +190,6 @@ class RecordControllerTest {
         }
     }
 
-    @Test
-    void getRecordsPageForAccount_noAuthorizationHeader_requestIsForbidden() throws Exception {
-        mockMvc.perform(get("/records/manage"))
-                .andExpect(status().isForbidden());
-    }
-
     @ParameterizedTest
     @MethodSource("getRecordsPageForAccountPaginationParams")
     void getRecordsPageForAccount_validJwt_returnsRecordsPage(String page, String size, String sort, Pageable expectedPageable) throws Exception {
@@ -238,14 +233,6 @@ class RecordControllerTest {
     class CreateRecord {
 
         @Test
-        void createRecord_noAuthorizationHeader_requestIsForbidden() throws Exception {
-            mockMvc.perform(post("/records/manage")
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .content("{}"))
-                    .andExpect(status().isForbidden());
-        }
-
-        @Test
         void createRecord_validJwtPresentInvalidPayload_shouldValidatePayloadAndThrowException() throws Exception {
             // given
             String invalidRecordJSONPayload = "{" +
@@ -276,6 +263,7 @@ class RecordControllerTest {
                     .andExpect(jsonPath("$.subErrors[0].rejectedValue", emptyString()))
                     .andExpect(jsonPath("$.subErrors[0].message", is("Title must not be empty")))
                     .andExpect(jsonPath("$.subErrors[1].message", is("Publication date only applicable for PUBLISHED publication status")));
+            verifyNoInteractions(recordService);
         }
 
         @Test
@@ -299,12 +287,6 @@ class RecordControllerTest {
 
     @Nested
     class DeleteRecord {
-
-        @Test
-        void deleteRecord_noAuthorizationHeader_requestIsForbidden() throws Exception {
-            mockMvc.perform(delete("/records/manage/{recordId}", recordId))
-                    .andExpect(status().isForbidden());
-        }
 
         @Test
         void deleteRecord_validJwtRecordDoesNotBelongToAccount_returnsBadRequest() throws Exception {
@@ -332,12 +314,6 @@ class RecordControllerTest {
 
     @Nested
     class EditRecord {
-
-        @Test
-        void editRecord_noAuthorizationHeader_requestIsForbidden() throws Exception {
-            mockMvc.perform(patch("/records/manage/{recordId}", recordId))
-                    .andExpect(status().isForbidden());
-        }
 
         @Test
         void editRecord_validJwtRecordDoesNotBelongToAccount_returnsNotFound() throws Exception {
