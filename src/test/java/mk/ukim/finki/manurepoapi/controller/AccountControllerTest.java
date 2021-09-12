@@ -79,7 +79,7 @@ class AccountControllerTest {
                     "  \"department\": \"MBS\"" +
                     "}";
 
-            when(accountService.isEmailAvailable(any(String.class))).thenReturn(true);
+            when(accountService.isEmailAvailable(anyString())).thenReturn(true);
 
             // when, then
             mockMvc.perform(post("/accounts")
@@ -108,7 +108,7 @@ class AccountControllerTest {
                     "  \"department\": \"notADepartment\"" +
                     "}";
 
-            when(accountService.isEmailAvailable(any(String.class))).thenReturn(true);
+            when(accountService.isEmailAvailable(anyString())).thenReturn(true);
 
             // when, then
             mockMvc.perform(post("/accounts")
@@ -143,7 +143,7 @@ class AccountControllerTest {
                     .build();
 
             when(accountService.createAccount(expectedAccountRequest)).thenReturn(TestUtils.createAccount("Aleksandar", "Dimoski"));
-            when(accountService.isEmailAvailable(any(String.class))).thenReturn(true);
+            when(accountService.isEmailAvailable(anyString())).thenReturn(true);
 
             // when, then
             mockMvc.perform(post("/accounts")
@@ -183,7 +183,7 @@ class AccountControllerTest {
         void confirmRegistration_invalidVerificationToken_redirectedToFailurePage() throws Exception {
             // given
             final String expectedRedirectionUrl = "http://localhost:4200/registration/failed";
-            doThrow(new InvalidTokenException()).when(accountService).confirmRegistration(any(String.class));
+            doThrow(new InvalidTokenException()).when(accountService).confirmRegistration(anyString());
 
             // when, then
             mockMvc.perform(get("/accounts/confirmRegistration")

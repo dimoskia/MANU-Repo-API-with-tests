@@ -140,7 +140,7 @@ class AdminControllerTest {
         @Test
         void getRecordDetails_recordNotFound_httpStatusIsNotFound() throws Exception {
             // given
-            when(adminService.getRecordDetails(any(Long.class))).thenThrow(new EntityNotFoundException(Record.class, recordId));
+            when(adminService.getRecordDetails(anyLong())).thenThrow(new EntityNotFoundException(Record.class, recordId));
 
             // when
             mockMvc.perform(get("/admin/records/{recordId}", recordId)

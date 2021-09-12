@@ -44,6 +44,7 @@ import static org.hamcrest.Matchers.emptyString;
 import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.ArgumentMatchers.argThat;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doThrow;
@@ -177,7 +178,7 @@ class RecordControllerTest {
         @Test
         void getRecordDetails_recordNotFound_httpStatusIsNotFound() throws Exception {
             // given
-            when(recordService.getPublicRecord(any(Long.class))).thenThrow(new EntityNotFoundException(Record.class, recordId));
+            when(recordService.getPublicRecord(anyLong())).thenThrow(new EntityNotFoundException(Record.class, recordId));
 
             // when
             mockMvc.perform(get("/records/browse/{recordId}", recordId))
@@ -280,7 +281,8 @@ class RecordControllerTest {
         @Test
         void createRecord_validJwtPresentValidPayload_shouldCreateNewRecord() throws Exception {
             // given
-            when(recordService.createRecord(any(), any())).thenReturn(TestUtils.createRecordWithFilesAndAuthors(recordId));
+            when(recordService.createRecord(any(Authentication.class), any(RecordRequest.class)))
+                    .thenReturn(TestUtils.createRecordWithFilesAndAuthors(recordId));
 
             // when, then
             mockMvc.perform(post("/records/manage")
