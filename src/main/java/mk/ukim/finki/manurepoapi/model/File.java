@@ -26,6 +26,7 @@ public class File {
     @ManyToOne(fetch = FetchType.LAZY)
     private Record record;
 
+    @EqualsAndHashCode.Exclude
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @MapsId
     @JoinColumn(name = "id")
