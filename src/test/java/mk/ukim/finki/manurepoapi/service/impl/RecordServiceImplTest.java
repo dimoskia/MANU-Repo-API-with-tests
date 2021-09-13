@@ -18,7 +18,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.AdditionalAnswers;
 import org.mockito.ArgumentMatchers;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
@@ -198,18 +197,37 @@ class RecordServiceImplTest {
         assertThat(actualRecordsPage).isEqualTo(expectedRecordsPage);
     }
 
-    @Test
-    void checkRecordPermissions_givenRecordAndAuthenticatedUser_returnsIfUserHasEditPermissions() {
-        // given
-        Account accountRef = Account.builder().id(1L).build();
-        when(accountService.getAccountRef(authentication)).thenReturn(accountRef);
-        when(recordRepository.existsByIdAndAuthorAccountsContaining(recordId, accountRef)).thenReturn(true);
+    @Nested
+    class CheckRecordPermissions {
 
-        // when
-        boolean recordEditPermission = recordService.checkRecordPermissions(recordId, authentication);
+        private final Long accountId = 1L;
 
-        // then
-        assertThat(recordEditPermission).isTrue();
+        @Test
+        void checkRecordPermissions_authenticatedUserIsAdmin_hasPermissionsForAllRecords() {
+            // given
+            when(authentication.getPrincipal()).thenReturn(new UserPrincipal(accountId, Role.ROLE_ADMIN));
+
+            // when
+            boolean recordEditPermission = recordService.checkRecordPermissions(recordId, authentication);
+
+            // then
+            assertThat(recordEditPermission).isTrue();
+        }
+
+        @Test
+        void checkRecordPermissions_givenRecordAndAuthenticatedUser_returnsIfUserHasEditPermissions() {
+            // given
+            when(authentication.getPrincipal()).thenReturn(new UserPrincipal(accountId, Role.ROLE_USER));
+            Account accountRef = Account.builder().id(accountId).build();
+            when(accountService.getAccountRef(authentication)).thenReturn(accountRef);
+            when(recordRepository.existsByIdAndAuthorAccountsContaining(recordId, accountRef)).thenReturn(true);
+
+            // when
+            boolean recordEditPermission = recordService.checkRecordPermissions(recordId, authentication);
+
+            // then
+            assertThat(recordEditPermission).isTrue();
+        }
     }
 
     @Test

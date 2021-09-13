@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import mk.ukim.finki.manurepoapi.dto.request.ManageRecordsFilter;
 import mk.ukim.finki.manurepoapi.dto.request.RecordRequest;
 import mk.ukim.finki.manurepoapi.dto.request.RecordsFilter;
+import mk.ukim.finki.manurepoapi.enums.Role;
 import mk.ukim.finki.manurepoapi.exception.EntityNotFoundException;
 import mk.ukim.finki.manurepoapi.model.Account;
 import mk.ukim.finki.manurepoapi.model.Record;
@@ -68,6 +69,10 @@ public class RecordServiceImpl implements RecordService {
 
     @Override
     public boolean checkRecordPermissions(Long recordId, Authentication authentication) {
+        UserPrincipal principal = (UserPrincipal) authentication.getPrincipal();
+        if (Role.ROLE_ADMIN.equals(principal.getRole())) {
+            return true;
+        }
         Account accountRef = accountService.getAccountRef(authentication);
         return recordRepository.existsByIdAndAuthorAccountsContaining(recordId, accountRef);
     }
